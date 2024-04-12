@@ -78,6 +78,7 @@ DB/.env
 .env.test.local
 .env.production.local
 .env.local
+Neo4j/.env
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
