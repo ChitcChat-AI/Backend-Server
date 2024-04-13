@@ -1,30 +1,12 @@
-const {db} = require("./firebase")
-const {query, orderBy, collection, getDocs} = require("firebase/firestore");
 const {driver} = require("./neo4j")
-const {logging} = require("neo4j-driver");
-const messages = collection(db, "messages");
+const { analyzeSentiment } = require("./sentimentExtractor")
 
 
-async function getMessages() {
-    let messagesData = []; // Initialize an empty array to store message data
-    try {
-        const messagesQuery = query(messages, orderBy('createdAt'));
-        const messagesList = await getDocs(messagesQuery);
-        messagesList.forEach(doc => {
-            messagesData.push(doc.data()); // Push each document's data to the array
-        });
-        return messagesData; // Return the array containing all messages
-    } catch (error) {
-        console.error("Error fetching messages:", error);
-        return []; // Return an empty array in case of an error
-    }
-}
 
 async function createGraph(messagesData, projectName) {
     const session = driver.session();
+    const tx = session.beginTransaction();
     try {
-        const tx = session.beginTransaction();
-
         let lastNodeName = null;
         for (let i = 1; i < messagesData.length; i++) {
             const nodeName = messagesData[i].name;
@@ -37,13 +19,22 @@ async function createGraph(messagesData, projectName) {
                 project: projectName
             });
 
-            // Ensure relationships are created within the same project
+            let sentimentScore = analyzeSentiment(messageText);
+            sentimentScore = isNaN(sentimentScore) ? 0 : sentimentScore;
+            let sentimentLabel;
+            if(sentimentScore < -0.2)
+                sentimentLabel = "negative";
+            else if(sentimentScore > 0.2)
+                sentimentLabel = "positive";
+            else
+                sentimentLabel = "natural";
             await tx.run('MATCH (a:Person {name: $fromName, project: $project}), (b:Person {name: $toName, project: $project}) ' +
-                'MERGE (a)-[r:ANSWERED {message: $message}]->(b)', {
+                `MERGE (a)-[r:${sentimentLabel} {message: $message, sentimentScore: $score}]->(b)`, {
                 fromName: nodeName,
                 toName: lastNodeName,
                 project: projectName,
                 message: messageText,
+                score: sentimentScore,
             });
         }
 
@@ -51,16 +42,14 @@ async function createGraph(messagesData, projectName) {
         await tx.commit();
     } catch (error) {
         console.error("Error creating graph:", error);
+    } finally {
+        if (tx) {
+            await tx.close();
+        }
         await session.close();
-        return;
+        await driver.close();
     }
-
-    console.log("Graph created successfully!");
-    await session.close();
 }
 
-// Calling getMessages and logging the result to console
-getMessages().then(messagesData => {
-    createGraph(messagesData, "test2").then(r => console.log("returned from createGraph"));
-    // Logs the array of message data
-});
+
+module.exports = { createGraph };
