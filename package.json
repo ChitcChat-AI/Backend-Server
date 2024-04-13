@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/peerfichman/ChitChat-Back#readme",
   "dependencies": {
+    "@google-cloud/language": "^6.3.0",
+    "@google-cloud/translate": "^8.2.0",
+    "axios": "^1.6.8",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "firebase": "^10.11.0",
