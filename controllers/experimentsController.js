@@ -24,9 +24,14 @@ const deleteExperiment = async (req, res) => {
     res.status(200)
 }
 
+const getAllExperiments = async (req, res) => {
+    res.status(200).json(await queries.getAllExperiments());
+}
+
 module.exports ={
     getExperimentById,
     createExperiment,
     updateExperiment,
-    deleteExperiment
+    deleteExperiment,
+    getAllExperiments
 }
