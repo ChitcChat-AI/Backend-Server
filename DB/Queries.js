@@ -1,11 +1,11 @@
 const db = require("./DB");
 
 
-const createExperiment  = async (subject, prompt, status ) =>
+const createExperiment  = async (name, subject, prompt, status ) =>
 {
     const {rows} =  await db.query(
-        "INSERT INTO experiments (exp_subject, exp_provoking_prompt, exp_status) VALUES ($1, $2, $3) RETURNING *",
-        [subject, prompt, status]
+        "INSERT INTO experiments (exp_name, exp_subject, exp_provoking_prompt, exp_status) VALUES ($1, $2, $3, $4) RETURNING *",
+        [name, subject, prompt, status]
     );
     return rows[0];
 }
@@ -42,11 +42,11 @@ const getAIAgentsByExperimentId = async(id) =>{
 
 }
 
-const updateExperiment = async (id, subject, prompt, status) =>{
+const updateExperiment = async (id,name, subject, prompt, status) =>{
    const  {rows} = await db.query(
-        "UPDATE experiments SET exp_subject = $1, exp_provoking_prompt= $2, exp_status = $3 " +
+        "UPDATE experiments SET exp_name = $1 exp_subject = $2, exp_provoking_prompt= $3, exp_status = $4 " +
             "WHERE exp_id = $4 RETURNING *",
-        [subject, prompt, status, id]
+        [name, subject, prompt, status, id]
     );
    return rows;
 }
