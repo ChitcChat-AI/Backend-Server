@@ -42,9 +42,7 @@ async function analyzeSentiment(text) {
 async function translateAndAnalyzeSentiment(text) {
     const translatedText = await translateText(text);
     console.log(`Translated Text: ${translatedText}`);
-    const sentiment = await analyzeSentiment(translatedText);
-    console.log(`Sentiment score: ${sentiment.score}`);
-    console.log(`Sentiment magnitude: ${sentiment.magnitude}`);
+    return await analyzeSentiment(translatedText);
 }
 
-translateAndAnalyzeSentiment("נשק זה דבר רע");
+module.exports = { translateAndAnalyzeSentiment };

@@ -1,9 +1,10 @@
 const express = require("express");
 const morgan = require('morgan'); // import morgan
 require('dotenv').config();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 const { experimentsRouter } = require("./routers/experimentsRouter");
 const { agentsRouter } = require("./routers/agentsRouter");
+const { snaGraphRouter } = require("./routers/snaGraphRouter");
 const cors = require('cors');
 const rfs = require("rotating-file-stream");
 
@@ -28,6 +29,7 @@ app.use(express.urlencoded({extended: true}));
 
 app.use('/api/experiments', experimentsRouter);
 app.use('/api/agents', agentsRouter);
+app.use('/api/sna', snaGraphRouter);
 
 
 app.use((req, res) => {

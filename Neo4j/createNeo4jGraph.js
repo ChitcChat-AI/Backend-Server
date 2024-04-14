@@ -1,7 +1,5 @@
 const {driver} = require("./neo4j")
-const { analyzeSentiment } = require("./sentimentExtractor")
-
-
+const { translateAndAnalyzeSentiment } = require("./getSentimentGCP")
 
 async function createGraph(messagesData, projectName) {
     const session = driver.session();
@@ -19,8 +17,8 @@ async function createGraph(messagesData, projectName) {
                 project: projectName
             });
 
-            let sentimentScore = analyzeSentiment(messageText);
-            sentimentScore = isNaN(sentimentScore) ? 0 : sentimentScore;
+            let sentiment = await translateAndAnalyzeSentiment(messageText);
+            let sentimentScore = sentiment.score;
             let sentimentLabel;
             if(sentimentScore < -0.2)
                 sentimentLabel = "negative";
@@ -47,7 +45,6 @@ async function createGraph(messagesData, projectName) {
             await tx.close();
         }
         await session.close();
-        await driver.close();
     }
 }
 

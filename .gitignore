@@ -78,7 +78,7 @@ web_modules/
 .env.test.local
 .env.production.local
 .env.local
-Neo4j/.env
+.env
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -131,3 +131,4 @@ dist
 .pnp.*
 
 log.txt
+package-lock.json
