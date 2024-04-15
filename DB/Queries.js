@@ -68,14 +68,31 @@ const deleteAIAgent = async (id) =>{
     await db.query('DELETE FROM ai_agents WHERE agent_id = $1', [id]);
 }
 
-const addSurveyAnswer = async (exp_id, user_id, opinionPre) => {
+const addSurveyAnswerPre = async (exp_id, user_id, opinionPre) => {
     const {rows} = await db.query('INSERT INTO surveys (exp_id, user_id, opinion_pre) VALUES ($1, $2, $3) RETURNING *',
         [exp_id, user_id, opinionPre])
+    return rows;
 }
 
 const addSurveyAnswerPost = async(exp_id, user_id, optionPost) =>{
     const {rows} = await db.query("UPDATE surveys SET opinion_post = $1 WHERE exp_id = $2  AND user_id = $3 RETURNING *", [optionPost, exp_id, user_id])
+    return rows;
 }
+
+const getSurveyStatsById = async(exp_id) =>{
+    const {rows} = await db.query(`SELECT
+    count(*) AS count_total,
+        COALESCE(sum(case when opinion_pre = 'For' then 1 ELSE 0 end),0) AS count_pre_for,
+        COALESCE(sum(case when opinion_pre = 'Against' then 1 ELSE 0 end),0) AS count_pre_against,
+        COALESCE(sum(case when opinion_pre = 'Neutral' then 1 ELSE 0 end),0) AS count_pre_neutral,
+        COALESCE(sum(case when opinion_post = 'For' then 1 ELSE 0 end),0) AS count_post_for,
+        COALESCE(sum(case when opinion_post = 'Against' then 1 ELSE 0 end),0) AS count_post_against,
+        COALESCE(sum(case when opinion_post = 'Neutral' then 1 ELSE 0 end),0) AS count_post_neutral
+    FROM surveys WHERE exp_id = $1`, [exp_id]);
+    return rows;
+}
+
+
 
 module.exports = {
     createExperiment,
@@ -88,7 +105,10 @@ module.exports = {
     updateAIAgent,
     deleteExperiment,
     deleteAIAgent,
-    getAIAgentsByExperimentId
+    getAIAgentsByExperimentId,
+    addSurveyAnswerPre,
+    addSurveyAnswerPost,
+    getSurveyStatsById
 }
 
 
