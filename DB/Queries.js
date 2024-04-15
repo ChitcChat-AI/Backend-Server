@@ -1,4 +1,5 @@
 const db = require("./DB");
+const {options} = require("pg/lib/defaults");
 
 
 const createExperiment  = async (name, subject, prompt, status ) =>
@@ -65,6 +66,15 @@ const deleteExperiment = async (id) =>{
 
 const deleteAIAgent = async (id) =>{
     await db.query('DELETE FROM ai_agents WHERE agent_id = $1', [id]);
+}
+
+const addSurveyAnswer = async (exp_id, user_id, opinionPre) => {
+    const {rows} = await db.query('INSERT INTO surveys (exp_id, user_id, opinion_pre) VALUES ($1, $2, $3) RETURNING *',
+        [exp_id, user_id, opinionPre])
+}
+
+const addSurveyAnswerPost = async(exp_id, user_id, optionPost) =>{
+    const {rows} = await db.query("UPDATE surveys SET opinion_post = $1 WHERE exp_id = $2  AND user_id = $3 RETURNING *", [optionPost, exp_id, user_id])
 }
 
 module.exports = {

@@ -1,7 +1,7 @@
 const queries = require('../DB/Queries');
 
 const getAIAgentsByExperimentId =async (req, res) =>{
-    const {exp_id} = req.body;
+    const exp_id = req.params.id;
     res.status(200).json(await queries.getAIAgentsByExperimentId(exp_id));
 }
 
