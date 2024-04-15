@@ -44,7 +44,7 @@ const getAIAgentsByExperimentId = async(id) =>{
 
 const updateExperiment = async (id,name, subject, prompt, status) =>{
    const  {rows} = await db.query(
-        "UPDATE experiments SET exp_name = $1 exp_subject = $2, exp_provoking_prompt= $3, exp_status = $4 " +
+        "UPDATE experiments SET exp_name = $1, exp_subject = $2, exp_provoking_prompt= $3, exp_status = $4 " +
             "WHERE exp_id = $5 RETURNING *",
         [name, subject, prompt, status, id]
     );
