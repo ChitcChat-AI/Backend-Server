@@ -1,4 +1,5 @@
 const queries = require('../DB/Queries');
+const {wss} = require('../WebSocket');
 
 const getExperimentById = async (req, res) => {
     const exp_id = req.params.id;
@@ -14,7 +15,9 @@ const createExperiment = async (req, res) => {
 
 const updateExperiment = async (req, res) => {
     const {exp_id, exp_name, exp_subject, exp_prompt, exp_status} = req.body;
-    res.status(200).json(await queries.updateExperiment(exp_id,exp_name, exp_subject, exp_prompt, exp_status));
+    const row = await queries.updateExperiment(exp_id,exp_name, exp_subject, exp_prompt, exp_status)
+    wss.emit('update_experiment', row);
+    res.status(200).json(row);
 }
 
 
