@@ -21,4 +21,4 @@ async function getGraph(collectionId) {
     return await retrieveGraph(collectionId);
 }
 
-module.exports = { createSnaGraph, getGraph };
+module.exports = { createSnaGraph, getGraph, createCSVFromFirestore };

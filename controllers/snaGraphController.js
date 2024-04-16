@@ -9,12 +9,11 @@ const createGraph = async (req, res) => {
 
 const getCSV = async (req, res) => {
     try {
-        const {collection_id, experiment_name} = req.query;
-        const csvContent = createCSVFromFirestore(collection_id);
-        res.setHeader('Content-disposition', `attachment; filename=${experiment_name} Messages.csv`);
-        res.set('Content-Type', 'text/csv');
-
-        res.status(200).send(csvContent);
+        const {collection_id, experiment_name} = req.params;
+        const csvContent = await createCSVFromFirestore(experiment_name);
+        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+        res.setHeader('Content-Disposition', `attachment; filename="${experiment_name}.csv"`);
+        res.send(csvContent);
     } catch (error) {
         console.error('Error generating CSV:', error);
         res.status(500).send('Error generating CSV');
@@ -28,5 +27,6 @@ const getSnaGraph = async  (req, res) => {
 }
 module.exports={
     createGraph,
-    getSnaGraph
+    getSnaGraph,
+    getCSV
 }

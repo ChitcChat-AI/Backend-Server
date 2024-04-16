@@ -20,9 +20,9 @@ async function createGraph(messagesData, projectName) {
             let sentiment = await translateAndAnalyzeSentiment(messageText);
             let sentimentScore = sentiment.score;
             let sentimentLabel;
-            if(sentimentScore < -0.2)
+            if(sentimentScore < -0.3)
                 sentimentLabel = "negative";
-            else if(sentimentScore > 0.2)
+            else if(sentimentScore > 0.3)
                 sentimentLabel = "positive";
             else
                 sentimentLabel = "natural";
