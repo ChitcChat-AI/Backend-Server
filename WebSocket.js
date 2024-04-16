@@ -1,7 +1,7 @@
  const {WebSocketServer, WebSocket} = require( 'ws');
 
-const wsExperiments = new WebSocketServer({port: process.env.PORT_WS_EXP, path: 'experiments'});
-const wsSurvey = new WebSocketServer({port: process.env.PORT_WS_SUR, path: 'survey'});
+const wsExperiments = new WebSocketServer({port: process.env.PORT_WS_EXP, path: '/experiments'});
+const wsSurvey = new WebSocketServer({port: process.env.PORT_WS_SUR, path: '/survey'});
 
 wsExperiments.on('connection', function connection(ws) {
     ws.on('error', console.error);
