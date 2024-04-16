@@ -1,23 +1,28 @@
  const {WebSocketServer, WebSocket} = require( 'ws');
 
-const wss = new WebSocketServer({port: process.env.PORT_WS});
+const wsExperiments = new WebSocketServer({port: process.env.PORT_WS_EXP, path: 'experiments'});
+const wsSurvey = new WebSocketServer({port: process.env.PORT_WS_SUR, path: 'survey'});
 
-wss.on('connection', function connection(ws) {
+wsExperiments.on('connection', function connection(ws) {
     ws.on('error', console.error);
 
 });
- wss.on('update_experiment', (newExperiment) => {
-         wss.clients.forEach((client) => {
+wsSurvey.on('connection', function connection(ws) {
+    ws.on('error', console.error);
+
+});
+ wsExperiments.on('update_experiment', (newExperiment) => {
+         wsExperiments.clients.forEach((client) => {
              if (client.readyState === WebSocket.OPEN)
                  client.send(JSON.stringify(newExperiment));
          })
      }
  )
- wss.on('update_survey_vote', (newSurveyResults) => {
-     wss.clients.forEach((client) => {
+ wsSurvey.on('update_survey_vote', (newSurveyResults) => {
+     wsSurvey.clients.forEach((client) => {
          if (client.readyState === WebSocket.OPEN)
              client.send(JSON.stringify(newSurveyResults));
      })
  })
 
-module.exports = {wss};
+module.exports = {wsExperiments, wsSurvey};
