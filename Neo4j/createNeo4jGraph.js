@@ -11,7 +11,6 @@ async function createGraph(messagesData, projectName) {
             const messageText = messagesData[i].text;
             const lastNodeName = messagesData[i - 1].name;
 
-            // Merge nodes with the project name property
             await tx.run('MERGE (a:Person {name: $name, project: $project}) RETURN a', {
                 name: nodeName,
                 project: projectName
