@@ -1,11 +1,12 @@
 const db = require("./DB");
+const {options} = require("pg/lib/defaults");
 
 
-const createExperiment  = async (subject, prompt, status ) =>
+const createExperiment  = async (name, subject, prompt, status ) =>
 {
     const {rows} =  await db.query(
-        "INSERT INTO experiments (exp_subject, exp_provoking_prompt, exp_status) VALUES ($1, $2, $3) RETURNING *",
-        [subject, prompt, status]
+        "INSERT INTO experiments (exp_name, exp_subject, exp_provoking_prompt, exp_status) VALUES ($1, $2, $3, $4) RETURNING *",
+        [name, subject, prompt, status]
     );
     return rows[0];
 }
@@ -42,11 +43,11 @@ const getAIAgentsByExperimentId = async(id) =>{
 
 }
 
-const updateExperiment = async (id, subject, prompt, status) =>{
+const updateExperiment = async (id,name, subject, prompt, status) =>{
    const  {rows} = await db.query(
-        "UPDATE experiments SET exp_subject = $1, exp_provoking_prompt= $2, exp_status = $3 " +
-            "WHERE exp_id = $4 RETURNING *",
-        [subject, prompt, status, id]
+        "UPDATE experiments SET exp_name = $1, exp_subject = $2, exp_provoking_prompt= $3, exp_status = $4 " +
+            "WHERE exp_id = $5 RETURNING *",
+        [name, subject, prompt, status, id]
     );
    return rows;
 }
@@ -67,6 +68,32 @@ const deleteAIAgent = async (id) =>{
     await db.query('DELETE FROM ai_agents WHERE agent_id = $1', [id]);
 }
 
+const addSurveyAnswerPre = async (exp_id, user_id, opinionPre) => {
+    const {rows} = await db.query('INSERT INTO surveys (exp_id, user_id, opinion_pre) VALUES ($1, $2, $3) RETURNING *',
+        [exp_id, user_id, opinionPre])
+    return rows;
+}
+
+const addSurveyAnswerPost = async(exp_id, user_id, optionPost) =>{
+    const {rows} = await db.query("UPDATE surveys SET opinion_post = $1 WHERE exp_id = $2  AND user_id = $3 RETURNING *", [optionPost, exp_id, user_id])
+    return rows;
+}
+
+const getSurveyStatsById = async(exp_id) =>{
+    const {rows} = await db.query(`SELECT
+    count(*) AS count_total,
+        COALESCE(sum(case when opinion_pre = 'For' then 1 ELSE 0 end),0) AS count_pre_for,
+        COALESCE(sum(case when opinion_pre = 'Against' then 1 ELSE 0 end),0) AS count_pre_against,
+        COALESCE(sum(case when opinion_pre = 'Neutral' then 1 ELSE 0 end),0) AS count_pre_neutral,
+        COALESCE(sum(case when opinion_post = 'For' then 1 ELSE 0 end),0) AS count_post_for,
+        COALESCE(sum(case when opinion_post = 'Against' then 1 ELSE 0 end),0) AS count_post_against,
+        COALESCE(sum(case when opinion_post = 'Neutral' then 1 ELSE 0 end),0) AS count_post_neutral
+    FROM surveys WHERE exp_id = $1`, [exp_id]);
+    return rows;
+}
+
+
+
 module.exports = {
     createExperiment,
     createAIAgent,
@@ -78,7 +105,10 @@ module.exports = {
     updateAIAgent,
     deleteExperiment,
     deleteAIAgent,
-    getAIAgentsByExperimentId
+    getAIAgentsByExperimentId,
+    addSurveyAnswerPre,
+    addSurveyAnswerPost,
+    getSurveyStatsById
 }
 
 
