@@ -4,7 +4,7 @@ const queries = require("../DB/Queries");
 const createGraph = async (req, res) => {
     const {collection_id, label_name} = req.body;
     await createSnaGraph(collection_id, label_name);
-    res.status(200);
+    res.status(200).send('created');
 }
 
 const getCSV = async (req, res) => {
