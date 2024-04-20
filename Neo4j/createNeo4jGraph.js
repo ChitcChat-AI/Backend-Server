@@ -1,6 +1,9 @@
 const {driver} = require("./neo4j")
-const { translateAndAnalyzeSentiment } = require("./getSentimentGCP")
+const { analyzeSentiment } = require("./getSentimentGCP")
 
+function containsEnglishChars(str) {
+    return /[a-zA-Z]/.test(str);
+}
 async function createGraph(messagesData, projectName) {
     const session = driver.session();
     const tx = session.beginTransaction();
@@ -15,9 +18,15 @@ async function createGraph(messagesData, projectName) {
                 name: nodeName,
                 project: projectName
             });
+            let sentiment = {score: 0};
+            if (containsEnglishChars(messageText)) {
+                sentiment = await analyzeSentiment(messageText);
+                console.log("sentiment:" + sentiment.score);
+                console.log(messageText)
+            }
 
-            let sentiment = await translateAndAnalyzeSentiment(messageText);
             let sentimentScore = sentiment.score;
+
             let sentimentLabel;
             if(sentimentScore < -0.3)
                 sentimentLabel = "negative";

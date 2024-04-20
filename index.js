@@ -1,7 +1,7 @@
 const express = require("express");
 const morgan = require('morgan'); // import morgan
 require('dotenv').config();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 const { experimentsRouter } = require("./routers/experimentsRouter");
 const { agentsRouter } = require("./routers/agentsRouter");
 const { snaGraphRouter } = require("./routers/snaGraphRouter");
