@@ -10,7 +10,7 @@ const createGraph = async (req, res) => {
 const getCSV = async (req, res) => {
     try {
         const {collection_id, experiment_name} = req.params;
-        const csvContent = await createCSVFromFirestore(experiment_name);
+        const csvContent = await createCSVFromFirestore(collection_id);
         res.setHeader('Content-Type', 'text/csv; charset=utf-8');
         res.setHeader('Content-Disposition', `attachment; filename="${experiment_name}.csv"`);
         res.send(csvContent);
