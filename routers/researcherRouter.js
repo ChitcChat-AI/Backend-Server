@@ -6,4 +6,4 @@ const researcherRouter = new Router();
 researcherRouter.get('/:id', researcherController.getResearcherById);
 researcherRouter.post('/', researcherController.createResearcher);
 
-export default researcherRouter;
+module.exports = {researcherRouter};
