@@ -6,6 +6,7 @@ const { experimentsRouter } = require("./routers/experimentsRouter");
 const { agentsRouter } = require("./routers/agentsRouter");
 const { snaGraphRouter } = require("./routers/snaGraphRouter");
 const { surveysRouter } = require("./routers/surveysRouter");
+const {researcherRouter} = require('./routers/researcherRouter')
 const cors = require('cors');
 const rfs = require("rotating-file-stream");
 
@@ -32,6 +33,7 @@ app.use('/api/experiments', experimentsRouter);
 app.use('/api/agents', agentsRouter);
 app.use('/api/sna', snaGraphRouter);
 app.use('/api/surveys', surveysRouter);
+app.use('/api/researchers', researcherRouter);
 
 
 app.use((req, res) => {

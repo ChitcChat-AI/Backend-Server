@@ -92,7 +92,19 @@ const getSurveyStatsById = async(exp_id) =>{
     return rows;
 }
 
+const createResearcher  = async (id, name, email, photoURL ) =>
+{
+    const {rows} =  await db.query(
+        "INSERT INTO researchers (researcher_id, researcher_name, researcher_email, researcher_photo_url) VALUES ($1, $2, $3, $4) RETURNING *",
+        [id, name, email, photoURL]
+    );
+    return rows[0];
+}
 
+const getResearcherById = async (id) =>{
+    const {rows} = await db.query('SELECT * FROM researchers WHERE researcher_id = $1', [id]);
+    return rows;
+}
 
 module.exports = {
     createExperiment,
@@ -108,7 +120,9 @@ module.exports = {
     getAIAgentsByExperimentId,
     addSurveyAnswerPre,
     addSurveyAnswerPost,
-    getSurveyStatsById
+    getSurveyStatsById,
+    createResearcher,
+    getResearcherById
 }
 
 
