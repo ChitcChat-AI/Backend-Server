@@ -1,5 +1,5 @@
 const { createSnaGraph, createCSVFromFirestore, getGraph } = require('../Neo4j/snaGraphHandler');
-const queries = require("../DB/Queries");
+const { getNumberOfMessages } = require('../AI-Agents/createUserPrompt');
 
 const createGraph = async (req, res) => {
     const {collection_id, label_name} = req.body;
@@ -25,8 +25,16 @@ const getSnaGraph = async  (req, res) => {
     res.status(200).json(await getGraph(collectionId));
 
 }
+
+const getMessages = async  (req, res) => {
+    const collectionId = req.params.id;
+    const numberOfMessages = req.params.number;
+    res.status(200).json(await getNumberOfMessages(collectionId, numberOfMessages));
+}
+
 module.exports={
     createGraph,
     getSnaGraph,
-    getCSV
+    getCSV,
+    getMessages
 }
