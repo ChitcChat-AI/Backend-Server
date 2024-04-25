@@ -20,11 +20,17 @@ async function createGraph(messagesData, projectName) {
             });
             let sentiment = {score: 0};
             if (containsEnglishChars(messageText)) {
-                sentiment = await analyzeSentiment(messageText);
-                console.log("sentiment:" + sentiment.score);
-                console.log(messageText)
+                try {
+                    const sentimentTemp = await analyzeSentiment(messageText);
+                    console.log(messageText)
+                    if(sentimentTemp) {
+                        sentiment = sentimentTemp;
+                    }
+                } catch (e) {
+                    console.log("get sentiment error" + e);
+                }
             }
-
+            console.log(sentiment.score);
             let sentimentScore = sentiment.score;
 
             let sentimentLabel;
