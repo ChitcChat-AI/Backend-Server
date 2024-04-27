@@ -23,7 +23,7 @@ const updateExperiment = async (req, res) => {
 
 const createExperimentWithAgents = async (req, res) => {
     const {exp, agents} = req.body;
-    const newExperimentWithAgents = JSON.parse(await CreateExperimentWithAgents(exp,agents));
+    const newExperimentWithAgents = await CreateExperimentWithAgents(exp,agents);
     res.status(200).json(newExperimentWithAgents);
 }
 
