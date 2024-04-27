@@ -5,7 +5,7 @@ const experimentsRouter = new Router();
 
 experimentsRouter.get('/:id', experimentsController.getExperimentById);
 experimentsRouter.get('/', experimentsController.getAllExperiments)
-experimentsRouter.post('/', experimentsController.createExperiment);
+experimentsRouter.post('/', experimentsController.createExperimentWithAgents);
 experimentsRouter.put('/', experimentsController.updateExperiment);
 experimentsRouter.delete('/', experimentsController.deleteExperiment);
 

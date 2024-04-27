@@ -1,4 +1,5 @@
 const queries = require('../DB/Queries');
+const {CreateExperimentWithAgents} = require('../BuissnessLogic/CreateExperimentWithAgents');
 const {wsExperiments} = require('../WebSocket');
 
 const getExperimentById = async (req, res) => {
@@ -20,6 +21,12 @@ const updateExperiment = async (req, res) => {
     res.status(200).json(row);
 }
 
+const createExperimentWithAgents = async (req, res) => {
+    const {exp, agents} = req.body;
+    const newExperimentWithAgents = JSON.parse(await CreateExperimentWithAgents(exp,agents));
+    res.status(200).json(newExperimentWithAgents);
+}
+
 
 const deleteExperiment = async (req, res) => {
     const {exp_id} = req.body;
@@ -36,5 +43,6 @@ module.exports ={
     createExperiment,
     updateExperiment,
     deleteExperiment,
-    getAllExperiments
+    getAllExperiments,
+    createExperimentWithAgents
 }
