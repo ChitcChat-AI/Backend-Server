@@ -11,7 +11,7 @@ async function generateResponse(prompt) {
         model: "gpt-3.5-turbo",
     });
 
-    console.log(completion.choices[0].message.content);
+   return completion.choices[0].message.content;
 }
 
 module.exports = {generateResponse};
