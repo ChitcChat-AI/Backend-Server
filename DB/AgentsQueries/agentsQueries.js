@@ -45,7 +45,7 @@ const getExperimentWithAgentsAsJson  = async (exp_id) =>{
             'activity_level', a.activity_level,
             'topics_of_interest',a.topics_of_interest,
             'messages_to_reply', a.messages_to_reply
-            ))) as exp_agent 
+            ))) as exp_agents 
             FROM experiment_agent  
             INNER JOIN experiments e ON experiment_agent.exp_id = e.exp_id 
             INNER JOIN agents a ON experiment_agent.agent_id = a.agent_id
