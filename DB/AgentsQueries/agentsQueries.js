@@ -40,6 +40,7 @@ const getExperimentWithAgentsAsJson  = async (exp_id) =>{
         'agents', json_agg( json_build_object(
             'agent_id', a.agent_id,
             'agent_name', a.agent_name,
+            'sentiment', a.sentiment,
             'opinion_alignment', a.opinion_alignment,
             'talking_style', a.talking_style,
             'activity_level', a.activity_level,
