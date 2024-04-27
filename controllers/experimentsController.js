@@ -1,10 +1,11 @@
 const queries = require('../DB/Queries');
+const agentQueries  =require('../DB/AgentsQueries/agentsQueries')
 const {CreateExperimentWithAgents} = require('../BuissnessLogic/CreateExperimentWithAgents');
 const {wsExperiments} = require('../WebSocket');
 
-const getExperimentById = async (req, res) => {
+const getExperimentWithAgentsById = async (req, res) => {
     const exp_id = req.params.id;
-    res.status(200).json(await queries.getExperimentById(exp_id));
+    res.status(200).json(await agentQueries.getExperimentWithAgentsAsJson(exp_id));
 }
 
 
@@ -39,7 +40,7 @@ const getAllExperiments = async (req, res) => {
 }
 
 module.exports ={
-    getExperimentById,
+    getExperimentWithAgentsById,
     createExperiment,
     updateExperiment,
     deleteExperiment,
