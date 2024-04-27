@@ -1,5 +1,5 @@
 const {collection, query, orderBy, getDocs} = require("firebase/firestore");
-const {db, app} = require("./firebase");
+const {db, app} = require("../DB/firebase");
 const {goOffline} = require('firebase/firestore');
 
 async function getMessages(collectionId) {
