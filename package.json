@@ -30,6 +30,7 @@
     "morgan": "^1.10.0",
     "natural": "^7.0.0",
     "neo4j-driver": "^5.19.0",
+    "openai": "^4.38.5",
     "pg": "^8.11.5",
     "pm2": "^5.3.1",
     "rotating-file-stream": "^3.2.1",
