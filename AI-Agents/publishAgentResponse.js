@@ -1,5 +1,5 @@
 const {collection, addDoc, serverTimestamp} = require("firebase/firestore");
-const {db} = require("../Neo4j/firebase");
+const {db} = require("../DB/firebase");
 
 const publishAgentResponse = async (id, value, name) => {
     if (value.trim() === '') {

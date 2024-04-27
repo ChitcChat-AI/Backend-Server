@@ -1,12 +1,12 @@
-const {collection, query, orderBy, getDocs, limit} = require("firebase/firestore");
-const {db} = require("../Neo4j/firebase");
+const {collection, query, orderBy, getDocs, limit, where} = require("firebase/firestore");
+const {db} = require("../DB/firebase");
 
 
-async function getNumberOfMessages(collectionId, numberOfMessages) {
+async function createUserPrompt(collectionId, numberOfMessages, agentName) {
     const messages = collection(db, collectionId);
     let messagesData = [];
     try {
-        const messagesQuery = query(messages, orderBy('createdAt', 'desc'), limit(numberOfMessages));
+        const messagesQuery = query(messages, orderBy('createdAt', 'desc') ,limit(numberOfMessages));
         const messagesList = await getDocs(messagesQuery);
         messagesList.forEach(doc => {
             messagesData.push({
@@ -21,4 +21,4 @@ async function getNumberOfMessages(collectionId, numberOfMessages) {
     }
 }
 
-module.exports = { getNumberOfMessages };
+module.exports = { createUserPrompt };
