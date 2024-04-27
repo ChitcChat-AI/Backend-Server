@@ -2,7 +2,7 @@ const db = require("../DB");
 
 const createAgent = async (agent_name, sentiment, opinion_alignment, talking_style, activity_level, topics_of_interest, messages_to_reply) => {
     const {rows} = await db.query(
-        "INSERT INTO agents (agent_name, sentiment, opinion_alignment, talking_style, activity_level, ARRAY topics_of_interest, messages_to_reply ) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+        "INSERT INTO agents (agent_name, sentiment, opinion_alignment, talking_style, activity_level, topics_of_interest, messages_to_reply ) VALUES ($1, $2, $3, $4, $5, ARRAY $6, $7) RETURNING *",
         [agent_name,sentiment, opinion_alignment, talking_style, activity_level, topics_of_interest, messages_to_reply]
     );
 
