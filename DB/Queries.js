@@ -106,6 +106,12 @@ const getResearcherById = async (id) =>{
     return rows;
 }
 
+const updateExperimentStatus = async (expId, newStatus) => {
+    const {rows} = await db.query(`UPDATE experiments SET exp_status = $2 WHERE exp_id = $1 RETURNING *;`, [expId, newStatus]);
+    return rows;
+
+}
+
 module.exports = {
     createExperiment,
     createAIAgent,
@@ -122,7 +128,8 @@ module.exports = {
     addSurveyAnswerPost,
     getSurveyStatsById,
     createResearcher,
-    getResearcherById
+    getResearcherById,
+    updateExperimentStatus
 }
 
 
