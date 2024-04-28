@@ -1,10 +1,9 @@
 const {driver} = require("./neo4j")
-const { analyzeSentiment } = require("./getSentimentGCP")
+const { getSentiment } = require("./getSentimentGCP")
+const { analyzeSentiment } = require("./sentimentExtractor")
 
-function containsEnglishChars(str) {
-    return /[a-zA-Z]/.test(str);
-}
 async function createGraph(messagesData, projectName) {
+    console.log("number of messages to create graph: " +messagesData.length);
     const session = driver.session();
     const tx = session.beginTransaction();
     try {
@@ -12,27 +11,17 @@ async function createGraph(messagesData, projectName) {
         for (let i = 1; i < messagesData.length; i++) {
             const nodeName = messagesData[i].name;
             const messageText = messagesData[i].text;
+            let sentimentScore = messagesData[i].sentimentScore
             const lastNodeName = messagesData[i - 1].name;
 
             await tx.run('MERGE (a:Person {name: $name, project: $project}) RETURN a', {
                 name: nodeName,
                 project: projectName
             });
-            let sentiment = {score: 0};
-            if (containsEnglishChars(messageText)) {
-                try {
-                    const sentimentTemp = await analyzeSentiment(messageText);
-                    console.log(messageText)
-                    if(sentimentTemp) {
-                        sentiment = sentimentTemp;
-                    }
-                } catch (e) {
-                    console.log("get sentiment error" + e);
-                }
+            if(!sentimentScore) {
+                console.log("sentiment Score undefined when creating graph")
+                sentimentScore = 0;
             }
-            console.log(sentiment.score);
-            let sentimentScore = sentiment.score;
-
             let sentimentLabel;
             if(sentimentScore < -0.3)
                 sentimentLabel = "negative";
