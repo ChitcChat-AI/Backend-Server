@@ -5,13 +5,14 @@ const determineWhichAgentToAnswer = (agents) => {
         agentsActive.push([startIndex, startIndex + agent.activity_level]);
         startIndex += agent.activity_level + 1;
     }
-    const randNum = Math.random() * (startIndex - 1) * 4;
+    const randNum = Math.round(Math.random() * (startIndex - 1) * 2);
+    console.log("the chosen number " + randNum + "agentsList " + agentsActive);
     for(let i = 0; i < agentsActive.length; i++) {
-        if(agentsActive[i][1] > randNum && agentsActive[i][0] < randNum) {
+        if(agentsActive[i][1] >= randNum && agentsActive[i][0] <= randNum) {
             return agents[i];
         }
     }
-    console.log("the chosen number " + randNum + "agentsList " + agentsActive);
+    
     return null;
 }
 

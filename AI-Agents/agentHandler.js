@@ -11,6 +11,7 @@ const agentHandler = async (agent, experiment) => {
         return;
     }
     const gptPrompt = [systemPrompt, ...userPrompt];
+    console.log(gptPrompt);
     const agentResponse = await generateResponse(gptPrompt);
     await publishAgentResponse(experiment.exp_id, agentResponse, agent.agent_name);
 
