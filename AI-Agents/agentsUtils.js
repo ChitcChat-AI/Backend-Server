@@ -6,13 +6,12 @@ const determineWhichAgentToAnswer = (agents) => {
         startIndex += agent.activity_level + 1;
     }
     const randNum = Math.round(Math.random() * (startIndex - 1) * 2);
-    console.log("the chosen number " + randNum + "agentsList " + agentsActive);
     for(let i = 0; i < agentsActive.length; i++) {
         if(agentsActive[i][1] >= randNum && agentsActive[i][0] <= randNum) {
             return agents[i];
         }
     }
-    
+
     return null;
 }
 
