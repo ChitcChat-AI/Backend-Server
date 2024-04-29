@@ -48,6 +48,7 @@ app.delete('/logout', function (request, response) {
     });
 });
 app.use((req, res) => {
+    console.log(req.path);
     res.status(400).send('Something is broken!');
 });
 
@@ -103,9 +104,6 @@ wss.on('connection', function (ws, request) {
     });
 });
 
-//
-// Start the server.
-//
 server.listen(3001, function () {
     console.log('Listening on http://localhost:3001');
 });
