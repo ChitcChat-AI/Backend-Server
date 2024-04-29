@@ -2,6 +2,7 @@ const {ExpUnsubMap} = require('../DB/Maps')
 const {updateExperimentStatus} =require('../DB/Queries')
 const {statusOptions} =require('../constants')
 const {firestoreColListener} = require('../DB/FirebaseColListener')
+const {ExpClientMap ,WsClientMap} = require('../DB/Maps')
 const ChangeExperimentStatus = async (expId, newStatus) => {
 
     if (newStatus === statusOptions.RUNNING){
@@ -18,6 +19,9 @@ const ChangeExperimentStatus = async (expId, newStatus) => {
         }
         ExpUnsubMap.remove(expId);
     }
+
+    const ws = WsClientMap[ExpClientMap[expId]];
+    if(ws) ws.emit('exp-update');
 
     return await updateExperimentStatus(expId, newStatus);
 

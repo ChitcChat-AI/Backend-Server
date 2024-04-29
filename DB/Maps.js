@@ -14,16 +14,25 @@ class MapperClass{
 
     #data = new Map();
 
-    add( expId, unsubFunc){
-        this.#data.set(expId,unsubFunc);
+    add( key, data){
+        this.#data.set(key,data);
     }
 
-    remove (expId) {
-        this.#data.delete(expId);
+    remove (key) {
+        this.#data.delete(key);
     }
 
-    get(expId) {
-        return this.#data.get(expId);
+    get(key) {
+        return this.#data.get(key);
+    }
+    deleteByValue(val){
+        const foundIdEntry = [... this.#data.entries()]
+            .find((x) => x === val);
+        if (foundIdEntry) this.#data.delete(foundIdEntry[0]);
+    }
+    getKeysByValue(val){
+        return  [... this.#data.entries()]
+            .find((x) => x === val);
     }
 
 
@@ -32,6 +41,6 @@ class MapperClass{
 
 // Create singleton instances using the factory function
 const ExpUnsubMap = createSingleton(MapperClass)();
-const WsClientServiceMap = createSingleton(MapperClass)();
-
-module.exports = {ExpUnsubMap ,WsClientServiceMap}
+const WsClientMap = createSingleton(MapperClass)();
+const ExpClientMap = createSingleton(MapperClass)();
+module.exports = {ExpUnsubMap ,WsClientMap,ExpClientMap}

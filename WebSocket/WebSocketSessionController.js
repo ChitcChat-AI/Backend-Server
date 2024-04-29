@@ -1,15 +1,19 @@
 const uuid = require("uuid");
-const {WsClientServiceMap} = require('../DB/Maps')
-const createSession =  (req, res) => {
+const { ExpClientMap } =require('../DB/Maps')
+const {getExperimentById} = require("../DB/Queries");
+const createSession =  async (req, res) => {
     const id= uuid.v4();
-
+    const {exp_id} = req.body;
     req.session.userId = id;
-    res.send({ result: 'OK', message: 'Session updated' });
+    ExpClientMap.add(exp_id, id);
+    const {exp_status} = await getExperimentById(exp_id)
+    res.status(200).json({exp_status : exp_status});
+
 }
 const destroySession =  (request, response)  =>{
-    const ws = WsClientServiceMap.get(request.session.userId);
+    const ws = WsClientMap.get(request.session.userId);
     console.log('Destroying session');
-    request.session.destroy(function () {
+    request.session.destroy( () => {
         if (ws) ws.close();
         response.send({ result: 'OK', message: 'Session destroyed' });
     });
