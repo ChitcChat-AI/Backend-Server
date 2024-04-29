@@ -31,8 +31,9 @@ class MapperClass{
         if (foundIdEntry) this.#data.delete(foundIdEntry[0]);
     }
     getKeysByValue(val){
+        console.log([... this.#data.entries()])
         return  [... this.#data.entries()]
-            .filter((x) => x !== val);
+            .filter((x) => x === val);
     }
 
 
