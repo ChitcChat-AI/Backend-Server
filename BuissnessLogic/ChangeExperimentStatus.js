@@ -19,15 +19,16 @@ const ChangeExperimentStatus = async (expId, newStatus) => {
         }
         ExpUnsubMap.remove(expId);
     }
-
+    const newExp = await updateExperimentStatus(expId, newStatus);
     const clientsArr =  ExpClientMap.getKeysByValue(expId);
     console.log(clientsArr)
     console.log(expId)
     clientsArr.map((client) =>{
         const ws = WsClientMap.get(client);
-        if(ws) ws.emit('exp-update');
+        if(ws) ws.emit('exp-update', newExp);
     })
-    return await updateExperimentStatus(expId, newStatus);
+    return newExp;
+
 
 }
 
