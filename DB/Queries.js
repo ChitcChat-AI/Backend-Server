@@ -108,7 +108,7 @@ const getResearcherById = async (id) =>{
 
 const updateExperimentStatus = async (expId, newStatus) => {
     const {rows} = await db.query(`UPDATE experiments SET exp_status = $2 WHERE exp_id = $1 RETURNING *;`, [expId, newStatus]);
-    return rows;
+    return rows[0];
 
 }
 
