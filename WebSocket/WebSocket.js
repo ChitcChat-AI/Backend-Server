@@ -1,8 +1,7 @@
-
 const session = require('express-session');
 const express = require('express');
 const http = require('http');
-const uuid = require('uuid');
+const {WebSocketSessionRouter} =require('./WebSocketSessionRouter')
 const { WebSocketServer } = require('ws');
 function onSocketError(err) {
     console.error(err);
@@ -10,43 +9,15 @@ function onSocketError(err) {
 const app = express();
 const map = new Map();
 
-//
-// We need the same instance of the session parser in express and
-// WebSocket server.
-//
+
 const sessionParser = session({
     saveUninitialized: false,
     secret: '$eCuRiTy',
     resave: false
 });
-
-//
-// Serve static files from the 'public' folder.
-//
 app.use(express.static('public'));
 app.use(sessionParser);
-
-app.post('/login', function (req, res) {
-    //
-    // "Log in" user and set userId to session.
-    //
-    const id = uuid.v4();
-
-    console.log(`Updating session for user ${id}`);
-    req.session.userId = id;
-    res.send({ result: 'OK', message: 'Session updated' });
-});
-
-app.delete('/logout', function (request, response) {
-    const ws = map.get(request.session.userId);
-
-    console.log('Destroying session');
-    request.session.destroy(function () {
-        if (ws) ws.close();
-
-        response.send({ result: 'OK', message: 'Session destroyed' });
-    });
-});
+app.use('/ws-session', WebSocketSessionRouter)
 app.use((req, res) => {
     console.log(req.path);
     res.status(400).send('Something is broken!');
