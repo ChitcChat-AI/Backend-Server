@@ -27,13 +27,15 @@ class MapperClass{
     }
     deleteByValue(val){
         const foundIdEntry = [... Object.entries(this.#data)]
-            .find((x) => x === val);
+            .find(([k,v]) => v === val);
         if (foundIdEntry) this.#data.delete(foundIdEntry[0]);
     }
     getKeysByValue(val){
-        console.log([... Object.entries(this.#data)])
-        return  [... this.#data.entries()]
-            .filter((x) => x === val);
+        return  [...this.#data.entries()]
+            .map(([k,v]) => {
+                if (v === val)
+                    return k
+            })
     }
 
 
@@ -44,4 +46,5 @@ class MapperClass{
 const ExpUnsubMap = createSingleton(MapperClass)();
 const WsClientMap = createSingleton(MapperClass)();
 const ExpClientMap = createSingleton(MapperClass)();
+
 module.exports = {ExpUnsubMap ,WsClientMap,ExpClientMap}
