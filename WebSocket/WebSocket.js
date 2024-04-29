@@ -64,6 +64,7 @@
 const { WebSocketServer } =  require ( 'ws');
 const {WsClientMap,ExpClientMap} = require('../DB/Maps')
 const uuid = require("uuid");
+const {json} = require("express");
 const wss = new WebSocketServer({ port: 3001 });
 
 wss.on('connection',(ws) => {
@@ -71,8 +72,8 @@ wss.on('connection',(ws) => {
     ws.on('error', console.error);
     ws.on('message', (data)=> {
         console.log(data)
-        const expId =  JSON.parse(data.data);
-        ExpClientMap.add(clientId,expId)
+        const msg =  JSON.parse(data);
+        ExpClientMap.add(clientId,msg.data)
     });
     ws.on('exp-update', (newExp) => {
         const {exp_status} = newExp;
