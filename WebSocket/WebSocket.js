@@ -17,6 +17,7 @@ const sessionParser = session({
     resave: false
 });
 app.use(cors());
+app.use(express.json());
 app.use(express.static('public'));
 app.use(sessionParser);
 app.use('/ws-session', WebSocketSessionRouter)

@@ -29,7 +29,7 @@ const getAllAIAgents = async () => {
 
 const getExperimentById = async (id) =>{
     const {rows} = await db.query('SELECT * FROM experiments WHERE exp_id = $1', [id]);
-    return rows;
+    return rows[0];
 }
 const getAIAgentById = async (id) =>{
     const {rows} = await db.query('SELECT * FROM ai_agents WHERE agent_id = $1', [id]);
