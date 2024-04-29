@@ -31,13 +31,12 @@ server.on('upgrade', function (request, socket, head) {
     socket.on('error', onSocketError);
 
     sessionParser(request, {}, () => {
-        if (!request.session.userId) {
-            socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
-            socket.destroy();
-            return;
-        }
+        // if (!request.session.userId) {
+        //     socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
+        //     socket.destroy();
+        //     return;
+        // }
         socket.removeListener('error', onSocketError);
-
         wss.handleUpgrade(request, socket, head, function (ws) {
             wss.emit('connection', ws, request);
         });
