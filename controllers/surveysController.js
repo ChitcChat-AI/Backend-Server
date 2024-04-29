@@ -1,5 +1,5 @@
 const queries = require('../DB/Queries');
-const {wsSurvey} = require('../WebSocket')
+const {wsSurvey} = require('../WebSocket/WebSocket')
 const insertAnswerPre = async (req,res) =>{
     const {exp_id, user_id, opinion_pre} = req.body;
     res.status(200).json(await  queries.addSurveyAnswerPre(exp_id, user_id, opinion_pre));
