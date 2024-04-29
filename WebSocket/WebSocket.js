@@ -61,7 +61,7 @@
 // });
 
 
-import { WebSocketServer } from 'ws';
+const { WebSocketServer } =  require ( 'ws');
 const {WsClientMap,ExpClientMap} = require('../DB/Maps')
 const uuid = require("uuid");
 const wss = new WebSocketServer({ port: 3001 });
