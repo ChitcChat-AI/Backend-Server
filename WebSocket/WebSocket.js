@@ -70,6 +70,7 @@ const wss = new WebSocketServer({port: 3001});
 
 wss.on('connection',  (ws) => {
     const clientId = uuid.v4();
+    WsClientMap.add(clientId, ws);
     ws.on('error', console.error);
     ws.on('message', async (data) => {
         const msg = JSON.parse(data);
@@ -81,5 +82,14 @@ wss.on('connection',  (ws) => {
         const {exp_status} = newExp;
         ws.send(JSON.stringify({exp_status: exp_status}));
     })
-    WsClientMap.add(clientId, ws);
+    ws.on('close', ()=>{
+        console.log('closing connection')
+        ExpClientMap.remove(clientId);
+        WsClientMap.get(clientId).terminate();
+        WsClientMap.remove(clientId);
+        console.log('connection closed')
+
+    })
+
 });
+
