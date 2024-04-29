@@ -26,12 +26,12 @@ class MapperClass{
         return this.#data.get(key);
     }
     deleteByValue(val){
-        const foundIdEntry = [... this.#data.entries()]
+        const foundIdEntry = [... Object.entries(this.#data)]
             .find((x) => x === val);
         if (foundIdEntry) this.#data.delete(foundIdEntry[0]);
     }
     getKeysByValue(val){
-        console.log([... this.#data.entries()])
+        console.log([... Object.entries(this.#data)])
         return  [... this.#data.entries()]
             .filter((x) => x === val);
     }
