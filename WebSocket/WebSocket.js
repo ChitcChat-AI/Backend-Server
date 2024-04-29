@@ -4,7 +4,8 @@ const http = require('http');
 const {WebSocketSessionRouter} =require('./WebSocketSessionRouter')
 const { WebSocketServer } = require('ws');
 const cors = require('cors');
-const {WsClientMap} = require("../DB/Maps");
+const {WsClientMap, ExpClientMap} = require("../DB/Maps");
+const {getExperimentById} = require('../DB/Queries')
 function onSocketError(err) {
     console.error(err);
 }
@@ -42,13 +43,25 @@ server.on('upgrade', function (request, socket, head) {
     });
 });
 
-wss.on('connection', function (ws, request) {
+wss.on('connection',  async (ws, request) => {
     const userId = request.session.userId;
-    WsClientMap.add(userId, ws);
+
+
+
     ws.on('error', console.error);
     ws.on('exp-update', function (newExp) {
-        ws.send(newExp)
+        const {exp_status} = newExp;
+        ws.send({exp_status: exp_status});
     });
+
+    const expIds = ExpClientMap.getKeysByValue(userId)
+    expIds.map(async (id) => {
+        const {exp_status} = await getExperimentById(id);
+        ws.send({exp_status: exp_status});
+    })
+
+    WsClientMap.add(userId, ws);
+
 });
 
 server.listen(3001, function () {

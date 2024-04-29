@@ -30,6 +30,10 @@ class MapperClass{
             .find((x) => x === val);
         if (foundIdEntry) this.#data.delete(foundIdEntry[0]);
     }
+    getKeysByValue(val){
+        return  [... this.#data.entries()]
+            .find((x) => x === val);
+    }
 
 
 }
