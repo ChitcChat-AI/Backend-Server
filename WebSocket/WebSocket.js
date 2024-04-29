@@ -51,9 +51,10 @@ wss.on('connection',  async (ws, request) => {
         const {exp_status} = newExp;
         ws.send({exp_status: exp_status});
     });
-    WsClientMap.add(userId, ws);
-
+    ws.send('hello');
 });
+
+
 
 server.listen(3001, function () {
     console.log('WS server is listening on  port 3001');
