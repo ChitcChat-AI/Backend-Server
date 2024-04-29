@@ -67,8 +67,7 @@ const uuid = require("uuid");
 const wss = new WebSocketServer({ port: 3001 });
 
 wss.on('connection',(ws) => {
-    ws.isAlive = true;
-    const clientId = uuid.v5();
+    const clientId = uuid.v4();
     ws.on('error', console.error);
     ws.on('message', (data)=> {
         console.log(data)
