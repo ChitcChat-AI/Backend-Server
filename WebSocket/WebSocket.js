@@ -4,6 +4,7 @@ const http = require('http');
 const {WebSocketSessionRouter} =require('./WebSocketSessionRouter')
 const { WebSocketServer } = require('ws');
 const cors = require('cors');
+const {WsClientMap} = require("../DB/Maps");
 function onSocketError(err) {
     console.error(err);
 }
@@ -24,18 +25,15 @@ app.use((req, res) => {
 });
 const server = http.createServer(app);
 const wss = new WebSocketServer({ clientTracking: false, noServer: true });
-
 server.on('upgrade', function (request, socket, head) {
     socket.on('error', onSocketError);
-    console.log('Parsing session from request...', request);
+
     sessionParser(request, {}, () => {
         if (!request.session.userId) {
             socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
             socket.destroy();
             return;
         }
-        console.log('Session is parsed!');
-
         socket.removeListener('error', onSocketError);
 
         wss.handleUpgrade(request, socket, head, function (ws) {
@@ -46,23 +44,13 @@ server.on('upgrade', function (request, socket, head) {
 
 wss.on('connection', function (ws, request) {
     const userId = request.session.userId;
-
-    map.set(userId, ws);
-
+    WsClientMap.add(userId, ws);
     ws.on('error', console.error);
-
-    ws.on('message', function (message) {
-        //
-        // Here we can now use session parameters.
-        //
-        console.log(`Received message ${message} from user ${userId}`);
-    });
-
-    ws.on('close', function () {
-        map.delete(userId);
+    ws.on('exp-update', function (newExp) {
+        ws.send(newExp)
     });
 });
 
 server.listen(3001, function () {
-    console.log('Listening on http://localhost:3001');
+    console.log('WS server is listening on  port 3001');
 });
