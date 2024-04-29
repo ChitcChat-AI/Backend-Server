@@ -47,6 +47,10 @@ app.delete('/logout', function (request, response) {
         response.send({ result: 'OK', message: 'Session destroyed' });
     });
 });
+app.use((req, res) => {
+    res.status(400).send('Something is broken!');
+});
+
 
 //
 // Create an HTTP server.
