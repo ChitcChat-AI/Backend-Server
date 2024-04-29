@@ -46,20 +46,11 @@ server.on('upgrade', function (request, socket, head) {
 wss.on('connection',  async (ws, request) => {
     const userId = request.session.userId;
 
-
-
     ws.on('error', console.error);
     ws.on('exp-update', function (newExp) {
         const {exp_status} = newExp;
         ws.send({exp_status: exp_status});
     });
-
-    const expIds = ExpClientMap.getKeysByValue(userId)
-    expIds.map(async (id) => {
-        const {exp_status} = await getExperimentById(id);
-        ws.send({exp_status: exp_status});
-    })
-
     WsClientMap.add(userId, ws);
 
 });
