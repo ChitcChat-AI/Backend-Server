@@ -77,7 +77,7 @@ wss.on('connection',(ws) => {
     });
     ws.on('exp-update', (newExp) => {
         const {exp_status} = newExp;
-        console.log(exp_status)
+        console.log(newExp)
         ws.send(JSON.stringify({exp_status: exp_status}));
     })
     WsClientMap.add(clientId, ws);
