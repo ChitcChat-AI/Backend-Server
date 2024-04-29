@@ -32,7 +32,7 @@ class MapperClass{
     }
     getKeysByValue(val){
         return  [... this.#data.entries()]
-            .find((x) => x === val);
+            .filter((x) => x === val);
     }
 
 
