@@ -34,6 +34,12 @@ class Logger {
             colorize: true,
             levels: customLevels.levels,
             transports: [
+                new winston.transports.Console({
+                    format: combine(
+                        timestamp(),
+                        loggerFormat
+                    )
+                }),
                 new WinstonRotatingFile({
                     filename: "logs/error.log",
                     level: 'error',
