@@ -2,18 +2,19 @@ const express = require("express");
 const morgan = require('morgan'); // import morgan
 require('dotenv').config();
 const port = process.env.PORT || 3000;
-const { experimentsRouter } = require("./routers/experimentsRouter");
-const { agentsRouter } = require("./routers/agentsRouter");
-const { snaGraphRouter } = require("./routers/snaGraphRouter");
-const { surveysRouter } = require("./routers/surveysRouter");
+const {experimentsRouter} = require("./routers/experimentsRouter");
+const {agentsRouter} = require("./routers/agentsRouter");
+const {snaGraphRouter} = require("./routers/snaGraphRouter");
+const {surveysRouter} = require("./routers/surveysRouter");
 const {researcherRouter} = require('./routers/researcherRouter')
+const {handleError} = require('./ErrorHaneling/APIError')
 const cors = require('cors');
 const rfs = require("rotating-file-stream");
 
 const app = express();
 // MORGAN SETUP
 // create a log stream
-const rfsStream = rfs.createStream("log.txt", {
+const rfsStream = rfs.createStream("requests.log", {
     size: '10M', // rotate every 10 MegaBytes written
     interval: '1d', // rotate daily
     compress: 'gzip' // compress rotated files
@@ -35,9 +36,15 @@ app.use('/api/sna', snaGraphRouter);
 app.use('/api/surveys', surveysRouter);
 app.use('/api/researchers', researcherRouter);
 
-
-app.use((req, res) => {
-    res.status(400).send('Something is broken!');
+app.use(async (err, req, res, next) => {
+        await handleError(err);
+        res.status(err.httpCode || 500);
+        res.send(err.description || error.message || 'Something is broken!');
 });
+
+app.use((req,res) => {
+    res.status(400).send('Something is broken!')
+})
+
 
 app.listen(port, () => console.log(`Express server is running on port ${port}`));

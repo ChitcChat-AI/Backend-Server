@@ -9,10 +9,11 @@ const pool = new Pool({
            database: process.env.RDS_DB_NAME
        })
 
-pool.on('connect', () => {
-    console.log('Connect successfully to database!');
-});
+pool.on('connect', (client) => {});
+pool.on('error', (err, client) => {
+    throw(err);
 
+} )
 module.exports = {
     query: (text, params) => pool.query(text, params),
 };

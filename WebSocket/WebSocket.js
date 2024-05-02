@@ -60,18 +60,18 @@
 //     console.log('WS server is listening on  port 3001');
 // });
 
-
 const {WebSocketServer} = require('ws');
 const {WsClientMap, ExpClientMap} = require('../DB/Maps')
 const uuid = require("uuid");
-const {json} = require("express");
 const {getExperimentById} = require("../DB/Queries");
+const {handleError} = require('../ErrorHaneling/APIError')
 const wss = new WebSocketServer({port: 3001});
+
 
 wss.on('connection',  (ws) => {
     const clientId = uuid.v4();
     WsClientMap.add(clientId, ws);
-    ws.on('error', console.error);
+    ws.on('error', async (err) => await handleError(err));
     ws.on('message', async (data) => {
         const msg = JSON.parse(data);
         ExpClientMap.add(clientId, msg.data);
@@ -83,11 +83,9 @@ wss.on('connection',  (ws) => {
         ws.send(JSON.stringify({exp_status: exp_status}));
     })
     ws.on('close', ()=>{
-        console.log('closing connection')
         ExpClientMap.remove(clientId);
         WsClientMap.get(clientId).terminate();
         WsClientMap.remove(clientId);
-        console.log('connection closed')
 
     })
 

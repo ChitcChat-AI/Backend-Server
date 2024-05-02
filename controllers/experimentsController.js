@@ -1,49 +1,84 @@
 const queries = require('../DB/Queries');
-const agentQueries  =require('../DB/AgentsQueries/agentsQueries')
+const agentQueries = require('../DB/AgentsQueries/agentsQueries')
 const {CreateExperimentWithAgents} = require('../BuissnessLogic/CreateExperimentWithAgents');
 const {ChangeExperimentStatus} = require('../BuissnessLogic/ChangeExperimentStatus')
-const getExperimentWithAgentsById = async (req, res) => {
-    const exp_id = req.params.id;
-    res.status(200).json(await agentQueries.getExperimentWithAgentsAsJson(exp_id));
+const {APIError} = require('../ErrorHaneling/APIError')
+const getExperimentWithAgentsById = async (req, res, next) => {
+    try {
+        const exp_id = req.params.id;
+        res.status(200).json(await agentQueries.getExperimentWithAgentsAsJson(exp_id));
+    } catch (err) {
+        const apiError = new APIError(err.name, err.message)
+        next(apiError, req, res);
+    }
 }
 
 
-const createExperiment = async (req, res) => {
-    const {exp_name, exp_subject, exp_provoking_prompt, exp_status} = req.body;
-    res.status(200).json(await queries.createExperiment(exp_name, exp_subject, exp_provoking_prompt, exp_status));
+const createExperiment = async (req, res, next) => {
+    try {
+        const {exp_name, exp_subject, exp_provoking_prompt, exp_status} = req.body;
+        res.status(200).json(await queries.createExperiment(exp_name, exp_subject, exp_provoking_prompt, exp_status));
+    } catch (err) {
+        const apiError = new APIError(err.name, err.message)
+        next(apiError, req, res);
+    }
 }
 
 
-const updateExperiment = async (req, res) => {
-    const {exp_id, exp_name, exp_subject, exp_provoking_prompt, exp_status} = req.body;
-    const row = await queries.updateExperiment(exp_id,exp_name, exp_subject, exp_provoking_prompt, exp_status)
-    res.status(200).json(row);
+const updateExperiment = async (req, res, next) => {
+    try {
+        const {exp_id, exp_name, exp_subject, exp_provoking_prompt, exp_status} = req.body;
+        const row = await queries.updateExperiment(exp_id, exp_name, exp_subject, exp_provoking_prompt, exp_status)
+        res.status(200).json(row);
+    } catch (err) {
+        const apiError = new APIError(err.name, err.message)
+        next(apiError, req, res);
+    }
 }
 
-const createExperimentWithAgents = async (req, res) => {
-    const {exp, agents} = req.body;
-    const newExperimentWithAgents = await CreateExperimentWithAgents(exp,agents);
-    res.status(200).json(newExperimentWithAgents);
+const createExperimentWithAgents = async (req, res, next) => {
+    try {
+        const {exp, agents} = req.body;
+        const newExperimentWithAgents = await CreateExperimentWithAgents(exp, agents);
+        res.status(200).json(newExperimentWithAgents);
+    } catch (err) {
+        const apiError = new APIError(err.name, err.message)
+        next(apiError, req, res);
+    }
 }
 
 
-const deleteExperiment = async (req, res) => {
-    const {exp_id} = req.body;
-    await queries.deleteExperiment(exp_id);
-    res.status(200)
+const deleteExperiment = async (req, res, next) => {
+    try {
+        const {exp_id} = req.body;
+        await queries.deleteExperiment(exp_id);
+        res.status(200)
+    } catch (err) {
+        const apiError = new APIError(err.name, err.message)
+        next(apiError, req, res);
+    }
 }
 
-const getAllExperiments = async (req, res) => {
-    res.status(200).json(await queries.getAllExperiments());
+const getAllExperiments = async (req, res, next) => {
+    try {
+        res.status(200).json(await queries.getAllExperiments());
+    } catch (err) {
+        const apiError = new APIError(err.name, err.message)
+        next(apiError, req, res);
+    }
 }
-const updateExperimentStatus = async (req, res) => {
-    const {exp_id, exp_status} = req.body;
-   const row =  await ChangeExperimentStatus(exp_id,exp_status);
-   res.status(200).json(row);
-
+const updateExperimentStatus = async (req, res, next) => {
+    try {
+        const {exp_id, exp_status} = req.body;
+        const row = await ChangeExperimentStatus(exp_id, exp_status);
+        res.status(200).json(row);
+    } catch (err) {
+        const apiError = new APIError(err.name, err.message)
+        next(apiError, req, res);
+    }
 }
 
-module.exports ={
+module.exports = {
     getExperimentWithAgentsById,
     createExperiment,
     updateExperiment,
