@@ -1,5 +1,6 @@
 const winston = require('winston');
-
+const { WinstonRotatingFile } = require("winston-rotating-file");
+const { combine, timestamp, printf } = winston.format;
 const customLevels = {
     levels: {
         trace: 5,
@@ -18,24 +19,36 @@ const customLevels = {
         fatal: 'red',
     },
 };
-
+const loggerFormat = printf(({ level, message, label, timestamp }) => {
+    return `[${timestamp}] ${level.toUpperCase()}: ${message};\n`;
+});
 
 
 class Logger {
      #logger;
 
     constructor() {
-        const prodTransport = new winston.transports.File({
-            filename: 'logs/error.log',
-            level: 'error',
-        });
 
         this.#logger = winston.createLogger({
             level:  'error',
+            colorize: true,
             levels: customLevels.levels,
-            transports: [prodTransport],
+            transports: [
+                new WinstonRotatingFile({
+                    filename: "logs/error.log",
+                    level: 'error',
+                    rfsOptions: {
+                        size: "10M", // rotate every 10 MegaBytes written
+                        compress: "gzip" // compress rotated files
+                    }
+                })
+            ],
+            format: combine(
+                timestamp(),
+                loggerFormat
+            ),
         });
-        winston.addColors(customLevels.colors);
+    winston.addColors(customLevels.colors);
     }
 
     trace(msg, meta) {

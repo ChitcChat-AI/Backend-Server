@@ -61,6 +61,7 @@ const deleteExperiment = async (req, res, next) => {
 
 const getAllExperiments = async (req, res, next) => {
     try {
+        throw (new Error('error handling test'))
         res.status(200).json(await queries.getAllExperiments());
     } catch (err) {
         const apiError = new APIError(err.name, err.message)
