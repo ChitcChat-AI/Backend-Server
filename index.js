@@ -7,7 +7,8 @@ const {agentsRouter} = require("./routers/agentsRouter");
 const {snaGraphRouter} = require("./routers/snaGraphRouter");
 const {surveysRouter} = require("./routers/surveysRouter");
 const {researcherRouter} = require('./routers/researcherRouter')
-const {handleError} = require('./ErrorHaneling/APIError')
+const {APIError} = require('./ErrorHaneling/APIError')
+const {logger} = require('./ErrorHaneling/ErrorLogger')
 const cors = require('cors');
 const rfs = require("rotating-file-stream");
 
@@ -37,12 +38,13 @@ app.use('/api/surveys', surveysRouter);
 app.use('/api/researchers', researcherRouter);
 
 app.use(async (err, req, res, next) => {
-        await handleError(err);
-        res.status(err.httpCode || 500);
-        res.send(err.description || err.message || 'Something is broken!');
+    if (err instanceof APIError) err.handleError();
+    else logger.error(err.message, err.stack)
+    res.status(err.httpCode || 500);
+    res.send(err.description || err.message || 'Something is broken!');
 });
 
-app.use((req,res) => {
+app.use((req, res) => {
     res.status(400).send('Something is broken!')
 })
 
