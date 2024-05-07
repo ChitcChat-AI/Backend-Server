@@ -1,18 +1,24 @@
-const determineWhichAgentToAnswer = (agents) => {
-    let startIndex = 0;
-    const agentsActive = [];
-    for(const agent of agents) {
-        agentsActive.push([startIndex, startIndex + agent.activity_level]);
-        startIndex += agent.activity_level + 1;
-    }
-    const randNum = Math.round(Math.random() * (startIndex - 1) * 2);
-    for(let i = 0; i < agentsActive.length; i++) {
-        if(agentsActive[i][1] >= randNum && agentsActive[i][0] <= randNum) {
-            return agents[i];
-        }
-    }
+const determineWhichAgentToAnswer = (agents, numOfParticipants = 20) => {
+  let startIndex = 0;
+  const valueOfActivityLevel = 5;
+  const agentsActive = [];
+  for (const agent of agents) {
+    let agentProbability = agent.activity_level * valueOfActivityLevel;
+    agentsActive.push([startIndex, startIndex + agentProbability]);
+    startIndex += agentProbability + 1;
+  }
+  const averageNumber = startIndex / agents.length;
+  const randNum = Math.round(
+    Math.random() * (averageNumber * numOfParticipants)
+  );
 
-    return null;
-}
+  for (let i = 0; i < agentsActive.length; i++) {
+    if (agentsActive[i][1] >= randNum && agentsActive[i][0] <= randNum) {
+      return agents[i];
+    }
+  }
+
+  return null;
+};
 
 module.exports = { determineWhichAgentToAnswer };
