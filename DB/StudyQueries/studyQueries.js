@@ -49,15 +49,20 @@ const updateStudy = async (id, name, subject, prompt, description) => {
 const deleteStudy = async (id) => {
     await db.query('DELETE FROM studies WHERE study_id = $1', [id]);
 }
+
+const addExperimentsToStudy = async (studyId, expId) => {
+    const {rows} = await db.query(
+        "INSERT INTO study_experiment (study_id, exp_id) VALUES ($1, $2) RETURNING *",
+        [studyId, expId]
+    );
+    return rows[0];
+}
 module.exports = {
     createStudy,
     getAllStudies,
     getExperimentsByStudyId,
     getStudyById,
     updateStudy,
-    deleteStudy
-
-
-
-
+    deleteStudy,
+    addExperimentsToStudy
 }
