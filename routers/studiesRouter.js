@@ -3,6 +3,7 @@ const studiesController = require('../controllers/studiesController');
 
 const studiesRouter = new Router();
 
+studiesRouter.get('/',studiesController.getAllStudies)
 studiesRouter.get('/:id', studiesController.getStudyById);
 studiesRouter.get('/experiments/:id', studiesController.getExperimentsByStudyId)
 studiesRouter.post('/', studiesController.createStudy);

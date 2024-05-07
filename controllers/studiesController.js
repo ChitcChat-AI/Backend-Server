@@ -1,5 +1,14 @@
 const queries = require('../DB/StudyQueries/studyQueries');
 const {APIError} = require('../ErrorHaneling/APIError')
+
+const getAllStudies = async (req, res, next) => {
+    try {
+        res.status(200).json(await queries.getAllStudies());
+    } catch (err) {
+        const apiError = new APIError(err)
+        next(apiError, req, res);
+    }
+}
 const getStudyById = async (req, res, next) => {
     try {
         const studyId = req.params.id;
@@ -58,6 +67,7 @@ const getExperimentsByStudyId = async (req, res, next) => {
 
 
 module.exports = {
+    getAllStudies,
     getStudyById,
     createStudy,
     updateStudy,
