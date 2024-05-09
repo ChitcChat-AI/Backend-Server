@@ -51,6 +51,19 @@ const updateExperiment = async (id,name, subject, prompt, status) =>{
     );
    return rows;
 }
+const updateExperimentDynamically = async (newColsArray, experimentId) =>{
+    const newData = [experimentId];
+    const {rows} = await db.query(`
+    UPDATE experiments
+    SET ` +
+        newColsArray.reduce((acc, [k, v], idx) => {
+            newData.push(v);
+            return '' + k + ' = $' + (idx + 2) + ', '
+        }, '').slice(0, -2) +
+        ` WHERE exp_id = $1 RETURNING *`
+        , newData);
+    return rows;
+}
 const updateAIAgent = async (id, name, sentiment, levelEng) =>{
     const  {rows} = await db.query(
         "UPDATE ai_agents SET agent_name = $1, sentiment= $2, level_of_engagement = $3 " +
@@ -129,7 +142,8 @@ module.exports = {
     getSurveyStatsById,
     createResearcher,
     getResearcherById,
-    updateExperimentStatus
+    updateExperimentStatus,
+    updateExperimentDynamically
 }
 
 

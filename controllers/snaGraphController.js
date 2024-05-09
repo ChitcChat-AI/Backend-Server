@@ -9,7 +9,7 @@ const createGraph = async (req, res, next) => {
         await createSnaGraph(collection_id, label_name);
         res.status(200).send('created');
     } catch (err) {
-        const apiError = new APIError(err.name, err.message)
+        const apiError = new APIError(err)
         next(apiError, req, res);
     }
 }
@@ -22,7 +22,7 @@ const getCSV = async (req, res, next) => {
         res.setHeader('Content-Disposition', `attachment; filename="${experiment_name}.csv"`);
         res.send(csvContent);
     } catch (err) {
-        const apiError = new APIError(err.name, err.message)
+        const apiError = new APIError(err)
         next(apiError, req, res);
     }
 }
@@ -32,7 +32,7 @@ const getSnaGraph = async (req, res, next) => {
         const collectionId = req.params.id;
         res.status(200).json(await getGraph(collectionId));
     } catch (err) {
-        const apiError = new APIError(err.name, err.message)
+        const apiError = new APIError(err)
         next(apiError, req, res);
     }
 }
@@ -43,7 +43,7 @@ const getMessages = async (req, res, next) => {
         const numberOfMessages = req.params.number;
         res.status(200).json(await getNumberOfMessages(collectionId, numberOfMessages));
     } catch (err) {
-        const apiError = new APIError(err.name, err.message)
+        const apiError = new APIError(err)
         next(apiError, req, res);
     }
 }
@@ -55,7 +55,7 @@ const publishMessage = async (req, res, next) => {
         const message = req.body.message;
         res.status(200).json(await publishAgentResponse(collectionId, message, name));
     } catch (err) {
-        const apiError = new APIError(err.name, err.message)
+        const apiError = new APIError(err)
         next(apiError, req, res);
     }
 }

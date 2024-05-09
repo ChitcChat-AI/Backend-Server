@@ -14,7 +14,7 @@ const getStudyById = async (req, res, next) => {
         const studyId = req.params.id;
         res.status(200).json(await queries.getStudyById(studyId));
     } catch (err) {
-        const apiError = new APIError(err.name, err.message)
+        const apiError = new APIError(err)
         next(apiError, req, res);
     }
 }
@@ -25,7 +25,7 @@ const createStudy = async (req, res, next) => {
         const {study_name, study_subject, study_prompt, study_description} = req.body;
         res.status(200).json(await queries.createStudy(study_name,study_subject,study_prompt,study_description));
     } catch (err) {
-        const apiError = new APIError(err.name, err.message)
+        const apiError = new APIError(err)
         next(apiError, req, res);
     }
 }
@@ -33,11 +33,13 @@ const createStudy = async (req, res, next) => {
 
 const updateStudy = async (req, res, next) => {
     try {
-        const {study_id, study_name, study_subject, study_prompt, study_description} = req.body;
-        const row = await queries.updateStudy(study_id, study_name, study_subject, study_prompt, study_description)
+        const {study_id} = req.body;
+        if (!study_id) throw new Error('study_id required in request body for update');
+        delete req.body.study_id;
+        const row = await queries.updateStudyDynamically(Object.entries(req.body), study_id);
         res.status(200).json(row);
     } catch (err) {
-        const apiError = new APIError(err.name, err.message)
+        const apiError = new APIError(err)
         next(apiError, req, res);
     }
 }
@@ -50,7 +52,7 @@ const deleteStudy = async (req, res, next) => {
         await queries.deleteStudy(study_id);
         res.status(200)
     } catch (err) {
-        const apiError = new APIError(err.name, err.message)
+        const apiError = new APIError(err)
         next(apiError, req, res);
     }
 }

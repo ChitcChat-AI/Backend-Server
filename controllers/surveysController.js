@@ -7,7 +7,7 @@ const insertAnswerPre = async (req, res, next) => {
         res.status(200).json(await queries.addSurveyAnswerPre(exp_id, user_id, opinion_pre));
         wsSurvey.emit('update_survey_vote', await queries.getSurveyStatsById(exp_id))
     } catch (err) {
-        const apiError = new APIError(err.name, err.message)
+        const apiError = new APIError(err)
         next(apiError, req, res);
     }
 }
@@ -17,7 +17,7 @@ const insertAnswerPost = async (req, res, next) => {
         res.status(200).json(await queries.addSurveyAnswerPost(exp_id, user_id, opinion_post));
         wsSurvey.emit('update_survey_vote', await queries.getSurveyStatsById(exp_id))
     } catch (err) {
-        const apiError = new APIError(err.name, err.message)
+        const apiError = new APIError(err)
         next(apiError, req, res);
     }
 }
@@ -27,7 +27,7 @@ const getSurveyStatsByExperimentId = async (req, res, next) => {
         const exp_id = req.params.id;
         res.status(200).json(await queries.getSurveyStatsById(exp_id));
     } catch (err) {
-        const apiError = new APIError(err.name, err.message)
+        const apiError = new APIError(err)
         next(apiError, req, res);
     }
 }
