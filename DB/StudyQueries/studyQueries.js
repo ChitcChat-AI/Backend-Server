@@ -40,7 +40,7 @@ const updateStudy = async (id, name, subject, prompt, description) => {
     const {rows} = await db.query(
         "UPDATE studies SET study_name = $1, study_subject = $2, study_prompt= $3, study_description = $4 " +
         "WHERE study_id = $5 RETURNING *",
-        [name, subject, prompt, description, status, id]
+        [name, subject, prompt, description, id]
     );
     return rows;
 }
