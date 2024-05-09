@@ -2,11 +2,11 @@ const db = require("./DB");
 const {options} = require("pg/lib/defaults");
 
 
-const createExperiment  = async (name, subject, prompt, status ) =>
+const createExperiment  = async (name, subject, prompt, status, participants ) =>
 {
     const {rows} =  await db.query(
-        "INSERT INTO experiments (exp_name, exp_subject, exp_provoking_prompt, exp_status) VALUES ($1, $2, $3, $4) RETURNING *",
-        [name, subject, prompt, status]
+        "INSERT INTO experiments (exp_name, exp_subject, exp_provoking_prompt, exp_status, exp_num_participants) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+        [name, subject, prompt, status, participants]
     );
     return rows[0];
 }

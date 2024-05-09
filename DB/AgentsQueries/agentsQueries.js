@@ -35,7 +35,8 @@ const getExperimentWithAgentsAsJson  = async (exp_id) =>{
                     'exp_id', e.exp_id,
                     'exp_subject', e.exp_subject,
                     'exp_provoking_prompt',  e.exp_provoking_prompt,
-                    'exp_crated_at', e.exp_created_at,\t
+                    'exp_num_participants', e.exp_num_participants,
+                    'exp_crated_at', e.exp_created_at,
                     'exp_status', e.exp_status,
                     'exp_name',e.exp_name,
                     'exp_messages_col_id', e.exp_messages_col_id
@@ -64,6 +65,7 @@ const getExperimentWithAgentsAsJson  = async (exp_id) =>{
                         'exp_crated_at', e.exp_created_at,\t
                         'exp_status', e.exp_status,
                         'exp_name',e.exp_name,
+                        'exp_num_participants', e.exp_num_participants,
                         'exp_messages_col_id', e.exp_messages_col_id
                         ),
                         'agents', '[]'::jsonb
