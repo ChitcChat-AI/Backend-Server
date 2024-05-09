@@ -5,9 +5,10 @@ const CreateExperimentWithAgents = async (experiment, agents) => {
     const { study_id,
             exp_name,
             exp_subject,
+            exp_num_participants,
             exp_provoking_prompt,
             exp_status } = experiment;
-    const newExperiment = await createExperiment(exp_name, exp_subject, exp_provoking_prompt, exp_status)
+    const newExperiment = await createExperiment(exp_name, exp_subject, exp_provoking_prompt, exp_status, exp_num_participants)
     const {exp_id} = newExperiment;
     await Promise.all( agents.map( async (agent) => {
             const { agent_name,
