@@ -45,6 +45,20 @@ const updateStudy = async (id, name, subject, prompt, description) => {
     return rows;
 }
 
+const updateStudyDynamically = async (newColsArray, studyId) => {
+    const newData = [studyId];
+    const {rows} = await db.query(`
+    UPDATE studies
+    SET ` +
+        newColsArray.reduce((acc, [k, v], idx) => {
+            newData.push(v);
+            return '' + k + ' = $' + (idx + 2) + ', '
+        }, '').slice(0, -2) +
+        ` WHERE study_id = $1 RETURNING *`
+        , newData);
+    return rows;
+}
+
 
 const deleteStudy = async (id) => {
     await db.query('DELETE FROM studies WHERE study_id = $1', [id]);
@@ -63,6 +77,7 @@ module.exports = {
     getExperimentsByStudyId,
     getStudyById,
     updateStudy,
+    updateStudyDynamically,
     deleteStudy,
     addExperimentsToStudy
 }
