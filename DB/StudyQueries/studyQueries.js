@@ -15,17 +15,12 @@ const getAllStudies = async () => {
 
 const getExperimentsByStudyId = async (id) => {
     const {rows} = await db.query(
-        `SELECT    e.exp_id,
-                        exp_subject,
-                        exp_provoking_prompt,
-                        exp_created_at,
-                        exp_status,
-                        exp_name,
-                        exp_messages_col_id
-                        FROM study_experiment se 
-                        INNER JOIN experiments e ON se.exp_id = e.exp_id
-                        GROUP BY se.study_id, se.exp_id, e.exp_id
-                        HAVING study_id = $1;`, [id]);
+       ` SELECT e.*, count(ea) as num_agents
+                FROM experiments e
+                INNER JOIN study_experiment se ON e.exp_id = se.exp_id
+                LEFT JOIN experiment_agent ea on e.exp_id  = ea.exp_id
+                GROUP BY e.exp_id, se.study_id HAVING se.study_id = $1`
+        , [id]);
     return rows;
 
 }
