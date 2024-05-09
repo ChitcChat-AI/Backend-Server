@@ -22,6 +22,13 @@ const getAllExperiments = async () => {
     const {rows} =  await db.query('SELECT * FROM experiments');
     return rows;
 }
+
+const getAllExperimentsWithStudyIdAndName = async() =>{
+    const {rows} =  await db.query(`SELECT  e.*, s.study_id, s.study_name FROM experiments e
+                                           INNER JOIN study_experiment se ON e.exp_id = se.exp_id
+                                           INNER JOIN studies s ON se.study_id = s.study_id;`);
+    return rows;
+};
 const getAllAIAgents = async () => {
     const {rows} =  await db.query('SELECT * FROM ai_agents');
     return rows;
@@ -143,7 +150,8 @@ module.exports = {
     createResearcher,
     getResearcherById,
     updateExperimentStatus,
-    updateExperimentDynamically
+    updateExperimentDynamically,
+    getAllExperimentsWithStudyIdAndName
 }
 
 

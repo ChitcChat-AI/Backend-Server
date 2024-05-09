@@ -63,7 +63,7 @@ const deleteExperiment = async (req, res, next) => {
 
 const getAllExperiments = async (req, res, next) => {
     try {
-        res.status(200).json(await queries.getAllExperiments());
+        res.status(200).json(await queries.getAllExperimentsWithStudyIdAndName());
     } catch (err) {
         const apiError = new APIError(err)
         next(apiError, req, res);
