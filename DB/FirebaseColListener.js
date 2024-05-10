@@ -48,7 +48,7 @@ const firestoreColListener = (colId) => {
       if (!isAgent) {
         const selectedAgent = determineWhichAgentToAnswer(
           agents,
-          exp.number_of_participants
+          exp.exp_num_participants
         );
         if (selectedAgent) {
           await agentHandler(selectedAgent, exp);
