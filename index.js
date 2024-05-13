@@ -31,7 +31,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-app.
 app.use('/api/studies', studiesRouter);
 app.use('/api/experiments', experimentsRouter);
 app.use('/api/agents', agentsRouter);
