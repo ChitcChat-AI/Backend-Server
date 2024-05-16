@@ -34,15 +34,14 @@ const firestoreColListener = (colId) => {
       docId = doc.id;
     });
     if (
-      !docData.hasOwnProperty("sentimentScore") &&
-      docData.createdAt !== null
+      !docData?.hasOwnProperty("sentimentScore") &&
+      docData?.createdAt !== null
     ) {
       const { exp, agents } = await getExperimentWithAgentsAsJson(colId);
       let isAgent = false;
       for (const agent of agents) {
-        if (docData.name === agent.agent_name) {
+        if (docData?.name === agent.agent_name) {
           isAgent = true;
-          console.log("skipped");
         }
       }
       if (!isAgent) {
@@ -52,7 +51,6 @@ const firestoreColListener = (colId) => {
         );
         if (selectedAgent) {
           await agentHandler(selectedAgent, exp);
-          console.log("Agent is " + selectedAgent.agent_name);
         }
       }
 
@@ -69,7 +67,6 @@ const firestoreColListener = (colId) => {
           console.log("get sentiment error" + e);
         }
       }
-      console.log(sentiment.score);
       await setDoc(docRef, {
         avatar: docData.avatar,
         createdAt: docData.createdAt,
