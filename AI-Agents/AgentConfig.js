@@ -1,6 +1,5 @@
 const generateAgentPrompt = (agent, subject) => {
-  const { sentiment, opinion_alignment, talking_style, topics_of_interest } =
-    agent;
+  const { sentiment, opinion_alignment, talking_style } = agent;
   return {
     role: "system",
     content:
