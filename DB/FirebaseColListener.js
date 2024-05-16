@@ -34,17 +34,19 @@ const firestoreColListener = (colId) => {
       docId = doc.id;
     });
     if (
-      !docData.hasOwnProperty("sentimentScore") &&
-      docData.createdAt !== null
+      !docData?.hasOwnProperty("sentimentScore") &&
+      docData?.createdAt !== null
     ) {
       const { exp, agents } = await getExperimentWithAgentsAsJson(colId);
+      console.log("exp is " + JSON.stringify(exp));
       let isAgent = false;
       for (const agent of agents) {
-        if (docData.name === agent.agent_name) {
+        if (docData?.name === agent.agent_name) {
           isAgent = true;
           console.log("skipped");
         }
       }
+      console.log("isAgent is " + JSON.stringify(agents));
       if (!isAgent) {
         const selectedAgent = determineWhichAgentToAnswer(
           agents,
