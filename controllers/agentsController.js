@@ -1,40 +1,58 @@
-const queries = require('../DB/Queries');
+const queries = require('../DB/AgentsQueries/agentsQueries');
 const {APIError} = require("../ErrorHaneling/APIError");
 
-const getAIAgentsByExperimentId = async (req, res, next) => {
+const getAgentsByExperimentId = async (req, res, next) => {
     try {
         const exp_id = req.params.id;
-        res.status(200).json(await queries.getAIAgentsByExperimentId(exp_id));
+        res.status(200).json(await queries.getAgentsByExperimentId(exp_id));
     } catch (err) {
         const apiError = new APIError(err)
         next(apiError, req, res);
     }
 }
 
-const createAIAgent = async (req, res, next) => {
+const getAgentById = async (req, res, next) => {
     try {
-        const {agent_name, agent_sentiment, agent_eng, exp_id} = req.body;
-        res.status(200).json(await queries.createAIAgent(agent_name, agent_sentiment, agent_eng, exp_id));
+        const agentId = req.params.id;
+        res.status(200).json(await queries.getAgentById(agentId));
     } catch (err) {
         const apiError = new APIError(err)
         next(apiError, req, res);
     }
 }
 
-const updateAIAgent = async (req, res, next) => {
+const createAgent = async (req, res, next) => {
     try {
-        const {agent_id, agent_name, agent_sentiment, agent_eng} = req.body;
-        res.status(200).json(await queries.updateAIAgent(agent_id, agent_name, agent_sentiment, agent_eng,));
+        const {
+            agent_name,
+            opinion_alignment,
+            talking_style,
+            activity_level,
+            messages_to_reply,
+            sentiment} = req.body;
+        res.status(200).json(await queries.createAgent(agent_name,sentiment,opinion_alignment,talking_style,activity_level,messages_to_reply));
     } catch (err) {
         const apiError = new APIError(err)
         next(apiError, req, res);
     }
 }
 
-const deleteAIAgent = async (req, res, next) => {
+const updateAgent = async (req, res, next) => {
     try {
         const {agent_id} = req.body;
-        await queries.deleteAIAgent(agent_id);
+        if (!agent_id) throw new Error('agent_id required in request body for update');
+        delete req.body.agent_id;
+        res.status(200).json(await queries.updateAgent(agent_id,Object.entries(req.body)));
+    } catch (err) {
+        const apiError = new APIError(err)
+        next(apiError, req, res);
+    }
+}
+
+const deleteAgent = async (req, res, next) => {
+    try {
+        const {agent_id} = req.body;
+        await queries.deleteAgent(agent_id);
         res.status(200)
     } catch (err) {
         const apiError = new APIError(err)
@@ -43,8 +61,9 @@ const deleteAIAgent = async (req, res, next) => {
 }
 
 module.exports = {
-    getAIAgentsByExperimentId,
-    createAIAgent,
-    updateAIAgent,
-    deleteAIAgent
+    getAgentsByExperimentId,
+    createAgent,
+    updateAgent,
+    deleteAgent,
+    getAgentById
 }

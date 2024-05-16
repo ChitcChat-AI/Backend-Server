@@ -1,15 +1,33 @@
 const db = require("../DB");
 
-const createAgent = async (agent_name, sentiment, opinion_alignment, talking_style, activity_level, topics_of_interest, messages_to_reply) => {
+const createAgent = async (agent_name, sentiment, opinion_alignment, talking_style, activity_level, messages_to_reply) => {
     const {rows} = await db.query(
-        "INSERT INTO agents (agent_name, sentiment, opinion_alignment, talking_style, activity_level, topics_of_interest, messages_to_reply ) VALUES ($1, $2, $3, $4, $5, $6 :: TEXT[], $7) RETURNING *",
-        [agent_name,sentiment, opinion_alignment, talking_style, activity_level, topics_of_interest, messages_to_reply]
+        "INSERT INTO agents (agent_name, sentiment, opinion_alignment, talking_style, activity_level, messages_to_reply ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+        [agent_name,sentiment, opinion_alignment, talking_style, activity_level, messages_to_reply]
     );
 
     return rows[0];
 }
+const updateAgent = async( id, newColsArray) => {
+    const newData = [id];
+    const {rows} = await db.query(`
+    UPDATE agents
+    SET ` +
+        newColsArray.reduce((acc, [k, v], idx) => {
+            newData.push(v);
+            return '' + k + ' = $' + (idx + 2) + ', '
+        }, '').slice(0, -2) +
+        ` WHERE exp_id = $1 RETURNING *`
+        , newData);
+    return rows;
 
-const jointAgentToExperiment = async (exp_id, agent_id) =>{
+}
+
+const deleteAgent = async(id) =>{
+    await db.query('DELETE FROM agents WHERE agent_id = $1', [id]);
+}
+
+const joinAgentToExperiment = async (exp_id, agent_id) =>{
     const {rows} = await db.query(
         "INSERT INTO experiment_agent (exp_id, agent_id) VALUES ($1, $2) RETURNING *",
         [exp_id, agent_id]
@@ -23,6 +41,14 @@ const getAgentById = async (agent_id) => {
         [agent_id]
     );
     return rows[0];
+}
+
+const getAgentsByExperimentId = async (id) => {
+    const {rows} = await db.query(
+        `SELECT a.* FROM experiment_agent ea
+                INNER JOIN agents a ON ea.agent_id = a.agent_id
+                WHERE ea.exp_id = $1;`,[id] );
+    return rows;
 }
 
 const getExperimentWithAgentsAsJson  = async (exp_id) =>{
@@ -87,8 +113,11 @@ const getExperimentWithAgentsAsJson  = async (exp_id) =>{
 }
 
 module.exports = {
+    updateAgent,
+    getAgentsByExperimentId,
+    deleteAgent,
     createAgent,
-    jointAgentToExperiment,
+    joinAgentToExperiment,
     getAgentById,
     getExperimentWithAgentsAsJson
 }
