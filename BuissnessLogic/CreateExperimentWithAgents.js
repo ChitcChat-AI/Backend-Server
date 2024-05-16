@@ -16,9 +16,8 @@ const CreateExperimentWithAgents = async (experiment, agents) => {
                     opinion_alignment,
                     talking_style,
                     activity_level,
-                    topics_of_interest,
                     messages_to_reply } = agent;
-            const {agent_id} = await createAgent( agent_name, sentiment, opinion_alignment, talking_style, activity_level, topics_of_interest, messages_to_reply);
+            const {agent_id} = await createAgent( agent_name, sentiment, opinion_alignment, talking_style, activity_level, messages_to_reply);
             await joinAgentToExperiment(exp_id,agent_id);
         }));
     await addExperimentsToStudy(study_id,exp_id);
