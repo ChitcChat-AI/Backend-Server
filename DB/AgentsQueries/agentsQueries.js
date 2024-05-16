@@ -50,7 +50,6 @@ const getExperimentWithAgentsAsJson  = async (exp_id) =>{
                                     'opinion_alignment', a.opinion_alignment,
                                     'talking_style', a.talking_style,
                                     'activity_level', a.activity_level,
-                                    'topics_of_interest',a.topics_of_interest,
                                     'messages_to_reply', a.messages_to_reply
                                 ))) as exp_agents
                             FROM experiments e
