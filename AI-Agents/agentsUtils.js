@@ -1,6 +1,6 @@
 const determineWhichAgentToAnswer = (agents, numOfParticipants = 20) => {
   let startIndex = 0;
-  const averageNumber = 3;
+  const participantActivityLevel = 2;
   const agentsActive = [];
 
   for (const agent of agents) {
@@ -9,7 +9,7 @@ const determineWhichAgentToAnswer = (agents, numOfParticipants = 20) => {
     startIndex += agentProbability + 1;
   }
 
-  const maxRand = averageNumber * numOfParticipants + startIndex;
+  const maxRand = participantActivityLevel * numOfParticipants + startIndex;
   const randNum = Math.round(Math.random() * maxRand);
 
   for (let i = 0; i < agentsActive.length; i++) {

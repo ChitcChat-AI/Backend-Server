@@ -38,15 +38,12 @@ const firestoreColListener = (colId) => {
       docData?.createdAt !== null
     ) {
       const { exp, agents } = await getExperimentWithAgentsAsJson(colId);
-      console.log("exp is " + JSON.stringify(exp));
       let isAgent = false;
       for (const agent of agents) {
         if (docData?.name === agent.agent_name) {
           isAgent = true;
-          console.log("skipped");
         }
       }
-      console.log("isAgent is " + JSON.stringify(agents));
       if (!isAgent) {
         const selectedAgent = determineWhichAgentToAnswer(
           agents,
@@ -54,7 +51,6 @@ const firestoreColListener = (colId) => {
         );
         if (selectedAgent) {
           await agentHandler(selectedAgent, exp);
-          console.log("Agent is " + selectedAgent.agent_name);
         }
       }
 
@@ -71,7 +67,6 @@ const firestoreColListener = (colId) => {
           console.log("get sentiment error" + e);
         }
       }
-      console.log(sentiment.score);
       await setDoc(docRef, {
         avatar: docData.avatar,
         createdAt: docData.createdAt,
