@@ -43,6 +43,14 @@ const getAgentById = async (agent_id) => {
     return rows[0];
 }
 
+const getAgentsByExperimentId = async (id) => {
+    const {rows} = await db.query(
+        `SELECT a.* FROM experiment_agent ea
+                INNER JOIN agents a ON ea.agent_id = a.agent_id
+                WHERE ea.exp_id = $1;`,[id] );
+    return rows;
+}
+
 const getExperimentWithAgentsAsJson  = async (exp_id) =>{
     const {rows} = await db.query(
         `SELECT * FROM (
@@ -68,7 +76,6 @@ const getExperimentWithAgentsAsJson  = async (exp_id) =>{
                                     'opinion_alignment', a.opinion_alignment,
                                     'talking_style', a.talking_style,
                                     'activity_level', a.activity_level,
-                                    'topics_of_interest',a.topics_of_interest,
                                     'messages_to_reply', a.messages_to_reply
                                 ))) as exp_agents
                             FROM experiments e
@@ -107,6 +114,7 @@ const getExperimentWithAgentsAsJson  = async (exp_id) =>{
 
 module.exports = {
     updateAgent,
+    getAgentsByExperimentId,
     deleteAgent,
     createAgent,
     joinAgentToExperiment,
