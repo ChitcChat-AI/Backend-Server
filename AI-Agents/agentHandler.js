@@ -7,7 +7,7 @@ const agentHandler = async (agent, experiment) => {
 
     const systemPrompt =  generateAgentPrompt(agent, experiment.exp_subject);
     const userPrompt = await createUserPrompt(experiment.exp_id, agent.messages_to_reply, agent.agent_name);
-    if (userPrompt.length === 0) {
+    if (userPrompt?.length === 0) {
         return;
     }
     const gptPrompt = [systemPrompt, ...userPrompt];

@@ -1,6 +1,6 @@
 const determineWhichAgentToAnswer = (agents, numOfParticipants = 20) => {
   let startIndex = 0;
-  const participantActivityLevel = 2;
+  const participantActivityLevel = 3;
   const agentsActive = [];
 
   for (const agent of agents) {
