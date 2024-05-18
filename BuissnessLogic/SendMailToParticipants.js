@@ -44,8 +44,8 @@ const sendMailToParticipants = async (expId, registerOrJoin) =>{
     const participantsMails =[];
     const participantsIds = await getParticipantsByExperimentId(expId);
     const {exp_subject} = await getExperimentById(expId);
-    participantsIds.forEach(({participant_id}) => {
-        getAuth().getUser(participant_id).then((userRecord) => participantsMails.push(userRecord.email))
+    participantsIds.forEach((participant) => {
+        getAuth().getUser(participant.participant_id).then((userRecord) => participantsMails.push(userRecord.email))
     })
     if(participantsMails.length  > 0 )
         await transporter.sendMail(mailOptions(participantsMails,expId,exp_subject, registerOrJoin), (err, info)=>{
