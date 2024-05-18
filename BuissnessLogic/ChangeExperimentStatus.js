@@ -3,13 +3,13 @@ const {updateExperimentStatus} =require('../DB/Queries');
 const {statusOptions} =require('../constants');
 const {firestoreColListener} = require('../DB/FirebaseColListener');
 const {ExpClientMap ,WsClientMap} = require('../DB/Maps');
-const {sendMailToParticipants} =require('./SendMailToParticipants')
+const {sendMailToAllParticipants} =require('./SendMailToParticipants')
 const ChangeExperimentStatus = async (expId, newStatus) => {
 
     if (newStatus === statusOptions.RUNNING){
         const unsub = firestoreColListener(expId);
         ExpUnsubMap.add(expId, unsub);
-        await sendMailToParticipants(expId,'join');
+        await sendMailToAllParticipants(expId,'join');
 
     }
     if (newStatus === statusOptions.COMPLETED){

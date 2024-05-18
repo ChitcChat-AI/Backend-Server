@@ -3,12 +3,13 @@ const composeEmail = require('./ComposeEmail');
 const smtpTransport = require('nodemailer-smtp-transport');
 const admin = require('firebase-admin');
 const {getAuth} = require('firebase-admin/auth');
-const { initializeApp } = require('firebase-admin/app');
-const {getParticipantsByExperimentId, getExperimentById} =require('../DB/Queries')
+const {initializeApp} = require('firebase-admin/app');
+const {getParticipantsByExperimentId, getExperimentById} = require('../DB/Queries')
 
 require('dotenv').config();
 
-initializeApp({credential: admin.credential.cert(
+initializeApp({
+    credential: admin.credential.cert(
         {
             "type": process.env.FIREBASE_ADMIN_TYPE,
             "project_id": process.env.FIREBASE_ADMIN_PROJECT_ID,
@@ -22,7 +23,8 @@ initializeApp({credential: admin.credential.cert(
             "client_x509_cert_url": process.env.FIREBASE_ADMIN_CLIENT_CERT_URI,
             "universe_domain": process.env.FIREBASE_ADMIN_UNIVERSE_DOMAIN
         }
-    )});
+    )
+});
 
 const transporter = nodemailer.createTransport(smtpTransport({
     service: 'gmail',
@@ -33,27 +35,41 @@ const transporter = nodemailer.createTransport(smtpTransport({
     }
 }));
 
-const mailOptions =(mail, expId, expSubject ,registerOrJoin)=> {return {
-    from: 'shenkar.chitchat.ai@gmail.com',
-    to: mail,
-    subject: 'ChitChat.ai: Successfully registered to experiment',
-    html: composeEmail('https://chitchat-chatplatform.web.app/' + expId , expSubject, registerOrJoin)
-}};
+const mailOptions = (mail, expId, expSubject, registerOrJoin) => {
+    return {
+        from: 'shenkar.chitchat.ai@gmail.com',
+        to: mail,
+        subject: 'ChitChat.ai: Successfully registered to experiment',
+        html: composeEmail('https://chitchat-chatplatform.web.app/' + expId, expSubject, registerOrJoin)
+    }
+};
 
-const sendMailToParticipants = async (expId, registerOrJoin) =>{
-    const participantsMails =[];
+const sendMailToAllParticipants = async (expId, registerOrJoin) => {
+    const participantsMails = [];
     const participantsIds = await getParticipantsByExperimentId(expId);
     const {exp_subject} = await getExperimentById(expId);
     participantsIds.forEach((participant) => {
         getAuth().getUser(participant.participant_id).then((userRecord) => participantsMails.push(userRecord.email))
     })
-    if(participantsMails.length  > 0 )
-        await transporter.sendMail(mailOptions(participantsMails,expId,exp_subject, registerOrJoin), (err, info)=>{
+    if (participantsMails.length > 0)
+        await transporter.sendMail(mailOptions(participantsMails, expId, exp_subject, registerOrJoin), (err, info) => {
             if (err)
                 throw new Error(err)
         });
     else
         throw new Error(`No participants are associated with experiment, exp_id: ${expId}`)
 }
+const sendMailToParticipant = async (expId, participantId, registerOrJoin = 'register') => {
 
-module.exports = {sendMailToParticipants}
+    const {exp_subject} = await getExperimentById(expId)
+    getAuth().getUser(participantId).then((userRecord) => {
+        transporter.sendMail(mailOptions(userRecord.email, expId, exp_subject, registerOrJoin), (err, info) => {
+            if (err)
+                throw new Error(err)
+        });
+    })
+
+
+}
+
+module.exports = {sendMailToAllParticipants, sendMailToParticipant}
