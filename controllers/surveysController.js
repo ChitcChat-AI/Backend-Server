@@ -29,8 +29,29 @@ const getSurveyStatsByExperimentId = async (req, res, next) => {
         next(apiError, req, res);
     }
 }
+
+const isParticipantAnsweredPre = async (req,res, next) => {
+    try {
+        const {exp_id, user_id} = req.body;
+        res.status(200).json(await queries.isParticipantAnswerSurveyPre(exp_id,user_id));
+    } catch (err) {
+        const apiError = new APIError(err)
+        next(apiError, req, res);
+    }
+}
+const isParticipantAnsweredPost = async (req,res, next) => {
+    try {
+        const {exp_id, user_id} = req.body;
+        res.status(200).json(await queries.isParticipantAnswerSurveyPost(exp_id,user_id));
+    } catch (err) {
+        const apiError = new APIError(err)
+        next(apiError, req, res);
+    }
+}
 module.exports = {
     insertAnswerPost,
     insertAnswerPre,
-    getSurveyStatsByExperimentId
+    getSurveyStatsByExperimentId,
+    isParticipantAnsweredPre,
+    isParticipantAnsweredPost
 }

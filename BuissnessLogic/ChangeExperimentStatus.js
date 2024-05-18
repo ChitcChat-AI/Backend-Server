@@ -1,28 +1,23 @@
-const {ExpUnsubMap} = require('../DB/Maps')
-const {updateExperimentStatus} =require('../DB/Queries')
-const {statusOptions} =require('../constants')
-const {firestoreColListener} = require('../DB/FirebaseColListener')
-const {ExpClientMap ,WsClientMap} = require('../DB/Maps')
+const {ExpUnsubMap} = require('../DB/Maps');
+const {updateExperimentStatus} =require('../DB/Queries');
+const {statusOptions} =require('../constants');
+const {firestoreColListener} = require('../DB/FirebaseColListener');
+const {ExpClientMap ,WsClientMap} = require('../DB/Maps');
+const {sendMailToParticipants} =require('./SendMailToParticipants')
 const ChangeExperimentStatus = async (expId, newStatus) => {
 
     if (newStatus === statusOptions.RUNNING){
         const unsub = firestoreColListener(expId);
         ExpUnsubMap.add(expId, unsub);
+        await sendMailToParticipants(expId,'join');
 
     }
     if (newStatus === statusOptions.COMPLETED){
-        try {
-            ExpUnsubMap.get(expId)();
-        }catch (err){
-            console.log(err);
-            console.log(ExpUnsubMap.get(expId))
-        }
+        ExpUnsubMap.get(expId)();
         ExpUnsubMap.remove(expId);
     }
     const newExp = await updateExperimentStatus(expId, newStatus);
     const clientsArr =  ExpClientMap.getKeysByValue(expId);
-    console.log(clientsArr)
-    console.log(expId)
     clientsArr.map((client) =>{
         const ws = WsClientMap.get(client);
         if(ws) ws.emit('exp-update', newExp);

@@ -1,7 +1,7 @@
 const { getAuth } =  require("firebase/auth");
 const { getFirestore } = require("firebase/firestore");
 const { initializeApp } = require("firebase/app");
-require('dotenv').config()
+require('dotenv').config();
 
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
@@ -16,5 +16,5 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-module.exports = { auth, db, app };
+module.exports = { auth, db, app, firebaseConfig };
 

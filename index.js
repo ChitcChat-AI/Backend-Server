@@ -7,7 +7,8 @@ const {agentsRouter} = require("./routers/agentsRouter");
 const {snaGraphRouter} = require("./routers/snaGraphRouter");
 const {surveysRouter} = require("./routers/surveysRouter");
 const {researcherRouter} = require('./routers/researcherRouter')
-const {studiesRouter} = require('./routers/studiesRouter')
+const {studiesRouter} = require('./routers/studiesRouter');
+const {mailRouter} = require('./routers/mailRouter')
 const {APIError} = require('./ErrorHaneling/APIError')
 const {logger} = require('./ErrorHaneling/ErrorLogger')
 const cors = require('cors');
@@ -37,6 +38,7 @@ app.use('/api/agents', agentsRouter);
 app.use('/api/sna', snaGraphRouter);
 app.use('/api/surveys', surveysRouter);
 app.use('/api/researchers', researcherRouter);
+app.use('/api/register', mailRouter);
 
 app.use(async (err, req, res, next) => {
     if (err instanceof APIError) err.handleError();
