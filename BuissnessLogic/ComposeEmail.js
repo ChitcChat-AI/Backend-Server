@@ -342,3 +342,4 @@ const composeEmail = (expLink, expSubject, registerJoin) => {
 
 
 }
+module.exports =  composeEmail;
