@@ -196,6 +196,16 @@ const isParticipantAnswerSurveyPost = async (expId, userId) => {
   return rows;
 };
 
+const isParticipantInExperiment = async (participantId, experimentId) => {
+  const { rows } = await db.query(
+    ` SELECT EXISTS (SELECT * FROM experiment_participant
+                                    WHERE participant_id= $1
+                                    AND exp_id = $2) as is_in`,
+    [participantId, experimentId]
+  );
+  return rows;
+};
+
 module.exports = {
   createExperiment,
   createAIAgent,
@@ -220,4 +230,5 @@ module.exports = {
   getParticipantsByExperimentId,
   isParticipantAnswerSurveyPre,
   isParticipantAnswerSurveyPost,
+  isParticipantInExperiment,
 };
