@@ -39,7 +39,7 @@ const mailOptions = (mail, expId, expSubject, registerOrJoin) => {
     return {
         from: 'shenkar.chitchat.ai@gmail.com',
         to: mail,
-        subject: 'ChitChat.ai: Successfully registered to experiment',
+        subject: registerOrJoin === 'register' ? 'ChitChat.ai: Successfully registered to experiment' : 'ChitChat.ai: Experiment is about to start',
         html: composeEmail('https://chitchat-chatplatform.web.app/' + expId, expSubject, registerOrJoin)
     }
 };

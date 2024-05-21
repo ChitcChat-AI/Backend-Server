@@ -315,7 +315,7 @@ const composeEmail = (expLink, expSubject, registerOrJoin) => {
     +
     registerOrJoin === 'register' ?
         `<h2>Thank you for registering to the experiment!</h2>`
-        : `<h2>Experiment is about to start click to join</h2>`
+        : `<h2>Experiment is about to start. Click to join</h2>`
         +
         `</div>
                             </td>
