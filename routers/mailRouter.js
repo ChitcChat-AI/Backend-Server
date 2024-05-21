@@ -7,11 +7,9 @@ const queries = require("../DB/Queries");
 const { APIError } = require("../ErrorHaneling/APIError");
 const { registerOrJoin } = require("../constants");
 const mailRouter = new Router();
-const { logger } = require("./ErrorLogger");
 
 mailRouter.post("/", async (req, res, next) => {
   try {
-    logger.info("body: ", exp_id, user_id);
     const { exp_id, user_id } = req.body;
     if (!exp_id || !user_id)
       throw new Error("exp_id and user_id required in request body!");
