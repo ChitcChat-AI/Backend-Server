@@ -1,24 +1,23 @@
 const { driver } = require("./neo4j");
 const { getSentiment } = require("./getSentimentGCP");
 const { analyzeSentiment } = require("./sentimentExtractor");
+const { from } = require("json2csv/JSON2CSVTransform");
 
 async function createGraph(messagesData, projectName) {
   console.log("number of messages to create graph: " + messagesData.length);
   const session = driver.session();
   const tx = session.beginTransaction();
   try {
-    let lastNodeName = null;
     for (let i = 1; i < messagesData.length; i++) {
       const nodeName = messagesData[i].name;
-      const messageText = messagesData[i].text;
       let sentimentScore = messagesData[i].sentimentScore;
-      const lastNodeName = messagesData[i - 1].name;
 
       await tx.run(
-        "MERGE (a:Person {name: $name, project: $project}) RETURN a",
+        "MERGE (a:Person {name: $name, project: $project, uid:$uid}) RETURN a",
         {
           name: nodeName,
           project: projectName,
+          uid: messagesData[i].uid,
         }
       );
       if (!sentimentScore) {
@@ -30,13 +29,15 @@ async function createGraph(messagesData, projectName) {
       else if (sentimentScore >= 0.3) sentimentLabel = "positive";
       else sentimentLabel = "natural";
       await tx.run(
-        "MATCH (a:Person {name: $fromName, project: $project}), (b:Person {name: $toName, project: $project}) " +
+        "MATCH (a:Person {name: $fromName, project: $project, uid: $fromUid}), (b:Person {name: $toName, project: $project, uid: $toUid}) " +
           `MERGE (a)-[r:${sentimentLabel} {message: $message, sentimentScore: $score}]->(b)`,
         {
           fromName: nodeName,
-          toName: lastNodeName,
+          fromUid: messagesData[i].uid,
+          toName: messagesData[i - 1].name,
+          toUid: messagesData[i - 1].uid,
           project: projectName,
-          message: messageText,
+          message: messagesData[i].text,
           score: sentimentScore,
         }
       );
