@@ -5,6 +5,7 @@ const admin = require('firebase-admin');
 const {getAuth} = require('firebase-admin/auth');
 const {initializeApp} = require('firebase-admin/app');
 const {getParticipantsByExperimentId, getExperimentById} = require('../DB/Queries')
+const {registerOrJoin} = require('../constants')
 
 require('dotenv').config();
 
@@ -59,11 +60,11 @@ const sendMailToAllParticipants = async (expId, registerOrJoin) => {
     else
         throw new Error(`No participants are associated with experiment, exp_id: ${expId}`)
 }
-const sendMailToParticipant = async (expId, participantId, registerOrJoin = 'register') => {
+const sendMailToParticipant = async (expId, participantId, registerJoin = registerOrJoin.REGISTER) => {
 
     const {exp_subject} = await getExperimentById(expId)
     getAuth().getUser(participantId).then((userRecord) => {
-        transporter.sendMail(mailOptions(userRecord.email, expId, exp_subject, registerOrJoin), (err, info) => {
+        transporter.sendMail(mailOptions(userRecord.email, expId, exp_subject, registerJoin), (err, info) => {
             if (err)
                 throw new Error(err)
         });

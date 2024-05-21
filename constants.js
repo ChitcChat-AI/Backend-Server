@@ -11,4 +11,9 @@ const HttpStatusCode = Object.freeze({
     INTERNAL_SERVER: 500,
 });
 
-module.exports = {statusOptions, HttpStatusCode};
+const registerOrJoin = Object.freeze({
+    REGISTER: 'register',
+    JOIN: 'join'
+});
+
+module.exports = {statusOptions, HttpStatusCode, registerOrJoin};

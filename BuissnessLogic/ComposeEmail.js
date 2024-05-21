@@ -1,4 +1,5 @@
-const composeEmail = (expLink, expSubject, registerOrJoin) => {
+const {registerOrJoin} = require('../constants')
+const composeEmail = (expLink, expSubject, registerJoin) => {
 
     return `<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -310,10 +311,9 @@ const composeEmail = (expLink, expSubject, registerOrJoin) => {
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
                             <td style="padding: 0 2.5em; text-align: center; padding-bottom: 3em;">
-                                <div class="text">
-                                   `
+                                <div class="text">`
     +
-    registerOrJoin === 'register' ?
+    registerJoin === registerOrJoin.REGISTER ?
         `<h2>Thank you for registering to the experiment!</h2>`
         : `<h2>Experiment is about to start. Click to join</h2>`
         +
@@ -334,7 +334,6 @@ const composeEmail = (expLink, expSubject, registerOrJoin) => {
             </tr><!-- end tr -->
             <!-- 1 Column Text + Button : END -->
         </table>
-
     </div>
 </center>
 </body>
