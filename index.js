@@ -9,7 +9,7 @@ const { surveysRouter } = require("./routers/surveysRouter");
 const { researcherRouter } = require("./routers/researcherRouter");
 const { studiesRouter } = require("./routers/studiesRouter");
 const { mailRouter } = require("./routers/mailRouter");
-const { particpantRouter } = require("./routers/particpantRouter");
+const { participantRouter } = require("./routers/particpantRouter");
 const { APIError } = require("./ErrorHaneling/APIError");
 const { logger } = require("./ErrorHaneling/ErrorLogger");
 const cors = require("cors");
@@ -42,7 +42,7 @@ app.use("/api/sna", snaGraphRouter);
 app.use("/api/surveys", surveysRouter);
 app.use("/api/researchers", researcherRouter);
 app.use("/api/register", mailRouter);
-app.use("/api/participant", particpantRouter);
+app.use("/api/participant", participantRouter);
 
 app.use(async (err, req, res, next) => {
   if (err instanceof APIError) err.handleError();
