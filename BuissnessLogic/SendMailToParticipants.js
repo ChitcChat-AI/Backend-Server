@@ -63,7 +63,6 @@ const sendMailToParticipant = async (expId, participantId, registerOrJoin = 'reg
 
     const {exp_subject} = await getExperimentById(expId)
     getAuth().getUser(participantId).then((userRecord) => {
-        console.log(userRecord)
         transporter.sendMail(mailOptions(userRecord.email, expId, exp_subject, registerOrJoin), (err, info) => {
             if (err)
                 throw new Error(err)
