@@ -191,7 +191,7 @@ const isParticipantAnswerSurveyPost = async (expId, userId) => {
                                 WHERE user_id= $1
                                 AND exp_id = $2
                                 AND opinion_post IS NOT NULL) as is_post`,
-    [expId, userId]
+    [userId, expId]
   );
   return rows;
 };
