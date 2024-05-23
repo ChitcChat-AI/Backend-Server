@@ -9,11 +9,11 @@ const ChangeExperimentStatus = async (expId, newStatus) => {
   if (newStatus === statusOptions.RUNNING) {
     const unsub = firestoreColListener(expId);
     ExpUnsubMap.add(expId, unsub);
-    try {
-      await sendMailToAllParticipants(expId, "join");
-    } catch (err) {
-      console.log(err);
-    }
+    // try {
+    //   await sendMailToAllParticipants(expId, "join");
+    // } catch (err) {
+    //   console.log(err);
+    // }
   }
   if (newStatus === statusOptions.COMPLETED) {
     ExpUnsubMap.get(expId);
@@ -24,7 +24,6 @@ const ChangeExperimentStatus = async (expId, newStatus) => {
   clientsArr.map((client) => {
     const ws = WsClientMap.get(client);
     if (ws) {
-      console.log("Send Exp details to client:", client)
       ws.emit("exp-update", newExp)
     };
   });
