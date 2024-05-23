@@ -32,14 +32,17 @@ class MapperClass{
     }
     getKeysByValue(val){
         return  [...this.#data.entries()]
-            .map(([k,v]) => {
-                if (v === val)
-                    return k
-            })
+            .filter(([k,v]) =>  v === val)
+            .map(([k,v]) => k)
     }
 
 
 }
+
+
+
+
+
 
 
 // Create singleton instances using the factory function
