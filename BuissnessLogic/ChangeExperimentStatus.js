@@ -4,11 +4,16 @@ const { statusOptions } = require("../constants");
 const { firestoreColListener } = require("../DB/FirebaseColListener");
 const { ExpClientMap, WsClientMap } = require("../DB/Maps");
 const { sendMailToAllParticipants } = require("./SendMailToParticipants");
+
 const ChangeExperimentStatus = async (expId, newStatus) => {
   if (newStatus === statusOptions.RUNNING) {
     const unsub = firestoreColListener(expId);
     ExpUnsubMap.add(expId, unsub);
-    await sendMailToAllParticipants(expId, "join");
+    try {
+      await sendMailToAllParticipants(expId, "join");
+    } catch (err) {
+      console.log(err);
+    }
   }
   if (newStatus === statusOptions.COMPLETED) {
     ExpUnsubMap.get(expId);
