@@ -69,6 +69,7 @@ const wss = new WebSocketServer({ port: 3001 });
 
 wss.on("connection", (ws) => {
   const clientId = uuid.v4();
+  console.log("New Client:", clientId)
   WsClientMap.add(clientId, ws);
   ws.on("error", async (err) => await handleError(err));
   ws.on("message", async (data) => {

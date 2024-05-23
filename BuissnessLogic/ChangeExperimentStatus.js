@@ -23,7 +23,10 @@ const ChangeExperimentStatus = async (expId, newStatus) => {
   const clientsArr = ExpClientMap.getKeysByValue(expId);
   clientsArr.map((client) => {
     const ws = WsClientMap.get(client);
-    if (ws) ws.emit("exp-update", newExp);
+    if (ws) {
+      console.log("Send Exp details to client:", client)
+      ws.emit("exp-update", newExp)
+    };
   });
   return newExp;
 };
