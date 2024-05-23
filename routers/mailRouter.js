@@ -14,7 +14,7 @@ mailRouter.post("/", async (req, res, next) => {
     if (!exp_id || !user_id)
       throw new Error("exp_id and user_id required in request body!");
     await addParticipantToExperiment(exp_id, user_id);
-    await sendMailToParticipant(exp_id, user_id, registerOrJoin.REGISTER);
+    // await sendMailToParticipant(exp_id, user_id, registerOrJoin.REGISTER);
     res.status(200).send("Successfully registered participant to experiment");
   } catch (err) {
     const apiError = new APIError(err);
