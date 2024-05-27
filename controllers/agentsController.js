@@ -1,5 +1,7 @@
 const queries = require('../DB/AgentsQueries/agentsQueries');
 const {APIError} = require("../ErrorHaneling/APIError");
+const { humanizeResponse } = require("../AI-Agents/humanizeResponse");
+const { generateResponse } = require("../AI-Agents/gptGenerator");
 
 const getAgentsByExperimentId = async (req, res, next) => {
     try {
@@ -59,11 +61,17 @@ const deleteAgent = async (req, res, next) => {
         next(apiError, req, res);
     }
 }
+const testAgentResponse = async (req, res) => {
+    const gptPrompt = [req.body.system_prompt, ...req.body.user_prompt];
+    const agentResponse = await generateResponse(gptPrompt);
+    res.status(200).json(humanizeResponse(agentResponse));
+}
 
 module.exports = {
     getAgentsByExperimentId,
     createAgent,
     updateAgent,
     deleteAgent,
-    getAgentById
+    getAgentById,
+    testAgentResponse
 }
