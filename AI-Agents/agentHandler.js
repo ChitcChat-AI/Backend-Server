@@ -2,6 +2,7 @@ const { publishAgentResponse } = require("./publishAgentResponse");
 const { createUserPrompt } = require("./createUserPrompt");
 const { generateAgentPrompt } = require("./AgentConfig");
 const { generateResponse } = require("./gptGenerator");
+const { humanizeResponse } = require("./humanizeResponse");
 
 const agentHandler = async (agent, experiment) => {
 
@@ -12,7 +13,8 @@ const agentHandler = async (agent, experiment) => {
     }
     const gptPrompt = [systemPrompt, ...userPrompt];
     const agentResponse = await generateResponse(gptPrompt);
-    await publishAgentResponse(experiment.exp_id, agentResponse, agent.agent_name, agent.agent_id);
+    const agentResponseAfterHumanized = humanizeResponse(agentResponse);
+    await publishAgentResponse(experiment.exp_id, agentResponseAfterHumanized, agent.agent_name, agent.agent_id);
 
 }
 
