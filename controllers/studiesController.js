@@ -1,6 +1,6 @@
 const queries = require('../DB/StudyQueries/studyQueries');
 const {APIError} = require('../ErrorHaneling/APIError')
-
+const {unAuthorized} =require('../Auth/authUtilis')
 const getAllStudies = async (req, res, next) => {
     try {
         res.status(200).json(await queries.getAllStudies());
@@ -67,6 +67,18 @@ const getExperimentsByStudyId = async (req, res, next) => {
     }
 }
 
+const getStudiesByResearcherId = async (req,res,next) => {
+    try {
+        const user = req.user;
+        if (!user) return await unAuthorized(req,res)
+        console.log(user)
+        res.status(200).json(await queries.getStudiesByResearcherId(user.researcher_id));
+    } catch (err) {
+        const apiError = new APIError(err)
+        next(apiError, req, res);
+    }
+}
+
 
 module.exports = {
     getAllStudies,
@@ -74,6 +86,7 @@ module.exports = {
     createStudy,
     updateStudy,
     deleteStudy,
-    getExperimentsByStudyId
+    getExperimentsByStudyId,
+    getStudiesByResearcherId
 
 }

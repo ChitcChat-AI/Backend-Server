@@ -66,6 +66,17 @@ const addExperimentsToStudy = async (studyId, expId) => {
     );
     return rows[0];
 }
+
+const getStudiesByResearcherId = async (id) => {
+    const {rows} = await db.query(
+        `SELECT studies.*
+                FROM studies
+                INNER JOIN researcher_study ON studies.study_id = researcher_study.study_id
+                INNER JOIN researchers ON researcher_study.researcher_id = researchers.researcher_id
+                WHERE researchers.researcher_id = $1;`, [id]
+    )
+    return rows;
+}
 module.exports = {
     createStudy,
     getAllStudies,
@@ -74,5 +85,6 @@ module.exports = {
     updateStudy,
     updateStudyDynamically,
     deleteStudy,
-    addExperimentsToStudy
+    addExperimentsToStudy,
+    getStudiesByResearcherId
 }
