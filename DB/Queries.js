@@ -6,11 +6,12 @@ const createExperiment = async (
   subject,
   prompt,
   status,
-  participants
+  participants,
+  simultaneous_responses
 ) => {
   const { rows } = await db.query(
-    "INSERT INTO experiments (exp_name, exp_subject, exp_provoking_prompt, exp_status, exp_num_participants) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-    [name, subject, prompt, status, participants]
+    "INSERT INTO experiments (exp_name, exp_subject, exp_provoking_prompt, exp_status, exp_num_participants, simultaneous_responses) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+    [name, subject, prompt, status, participants, simultaneous_responses]
   );
   return rows[0];
 };
