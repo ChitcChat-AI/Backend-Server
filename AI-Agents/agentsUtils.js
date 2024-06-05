@@ -1,27 +1,22 @@
-const determineWhichAgentToAnswer = (agents, numOfParticipants = 20) => {
-  let startIndex = 0;
-  const participantActivityLevel = 3;
-  const agentsActive = [];
+const determineWhichAgentToAnswer = (agents, exp) => {
+  const maxRand = 100;
 
   for (const agent of agents) {
-    let agentProbability = agent.activity_level;
+    const randNum = Math.round(Math.random() * maxRand);
 
-    console.log("from: ", startIndex, " to: ", startIndex + agentProbability);
-    agentsActive.push([startIndex, startIndex + agentProbability]);
-    startIndex += agentProbability + 1;
-  }
+    console.log("randNum: ", randNum);
+    console.log("agent.activity_level: ", agent.activity_level);
 
-  const maxRand = participantActivityLevel * numOfParticipants + startIndex;
-  const randNum = Math.round(Math.random() * maxRand);
-  console.log("maxRand: ", maxRand);
-  console.log("randNum: ", randNum);
-  for (let i = 0; i < agentsActive.length; i++) {
-    if (agentsActive[i][1] >= randNum && agentsActive[i][0] <= randNum) {
-      return agents[i];
+    if (randNum <= agent.activity_level) {
+      console.log("responded", agent.name);
+      console.log("exp.respondParallel", exp.respondParallel);
+
+      agentHandler(agent, exp);
+      if (!exp.simultaneous_responses) {
+        break;
+      }
     }
   }
-
-  return null;
 };
 
 module.exports = { determineWhichAgentToAnswer };
