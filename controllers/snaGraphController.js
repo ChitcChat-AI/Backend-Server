@@ -21,7 +21,6 @@ const createGraph = async (req, res, next) => {
 
 const getCSV = async (req, res, next) => {
   try {
-    console.log("test");
     const { collection_id } = req.params;
     const data = await createCSVFromFirestore(collection_id);
     stringify(data, (err, output) => {

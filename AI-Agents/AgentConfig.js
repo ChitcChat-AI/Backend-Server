@@ -40,6 +40,7 @@ const generateAgentPrompt = (agent, subject) => {
     talking_style +
     "\nyour answer should be maximum 3 sentences, everyone need to think that you are a human. Don't use punctuations at all, and have some typos.";
 
+  console.log("Agent Prompt: " + content);
   return {
     role: "system",
     content: content,

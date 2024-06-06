@@ -3,7 +3,6 @@ const { getSentiment } = require("./getSentimentGCP");
 const { analyzeSentiment } = require("./sentimentExtractor");
 
 async function createGraph(messagesData, projectName) {
-  console.log("number of messages to create graph: " + messagesData.length);
   const session = driver.session();
   const tx = session.beginTransaction();
   try {
