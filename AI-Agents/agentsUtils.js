@@ -2,7 +2,7 @@ const { agentHandler } = require("./agentHandler");
 
 const determineWhichAgentToAnswer = (agents, exp) => {
   const maxRand = 100;
-  const TimeOut = 3000;
+  let TimeOut = 3000;
   console.log("Agents len: " + agents.length);
   for (const agent of agents) {
     const randNum = Math.round(Math.random() * maxRand);
