@@ -12,8 +12,9 @@ const determineWhichAgentToAnswer = (agents, exp) => {
     if (randNum <= agent.activity_level) {
       console.log("responded", agent.agent_name);
       console.log("exp.simultaneous_responses", exp.simultaneous_responses);
-
-      agentHandler(agent, exp);
+      setTimeout(() => {
+        agentHandler(agent, exp);
+      }, 5000);
       if (!exp.simultaneous_responses) {
         break;
       }
