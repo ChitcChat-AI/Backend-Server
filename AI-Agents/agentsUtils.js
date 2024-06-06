@@ -1,3 +1,5 @@
+const { agentHandler } = require("./agentHandler");
+
 const determineWhichAgentToAnswer = (agents, exp) => {
   const maxRand = 100;
 
@@ -8,8 +10,8 @@ const determineWhichAgentToAnswer = (agents, exp) => {
     console.log("agent.activity_level: ", agent.activity_level);
 
     if (randNum <= agent.activity_level) {
-      console.log("responded", agent.name);
-      console.log("exp.respondParallel", exp.respondParallel);
+      console.log("responded", agent.agent_name);
+      console.log("exp.simultaneous_responses", exp.simultaneous_responses);
 
       agentHandler(agent, exp);
       if (!exp.simultaneous_responses) {

@@ -11,7 +11,6 @@ const {
 const {
   getExperimentWithAgentsAsJson,
 } = require("./AgentsQueries/agentsQueries");
-const { agentHandler } = require("../AI-Agents/agentHandler");
 const { determineWhichAgentToAnswer } = require("../AI-Agents/agentsUtils");
 const { set } = require("express/lib/application");
 const { analyzeSentiment } = require("../Neo4j/getSentimentGCP");
