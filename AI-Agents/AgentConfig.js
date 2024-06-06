@@ -20,13 +20,13 @@ const generateAgentPrompt = (agent, subject) => {
   }
 
   if (agent.talking_style === "Sarcastic") {
-    talk_style =
+    talking_style =
       "In your respond, be sarcastic. be funny, be humorous. sometimes even mock, but still explain your opinion.";
   } else if (talking_style === "Emphatic") {
-    talk_style =
+    talking_style =
       "In your respond, be empathic. Show understanding, compassion, and sensitivity towards the feelings and experiences of others. take into consideration their emotions.";
   } else {
-    talk_style =
+    talking_style =
       "In your respond, be charismatic. Display charm, confidence, and an engaging personality. Capture attention with your words, inspire others, and leave a lasting positive impression.";
   }
 
