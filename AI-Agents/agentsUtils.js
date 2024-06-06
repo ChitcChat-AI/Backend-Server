@@ -2,19 +2,15 @@ const { agentHandler } = require("./agentHandler");
 
 const determineWhichAgentToAnswer = (agents, exp) => {
   const maxRand = 100;
-
+  const TimeOut = 3000;
   for (const agent of agents) {
     const randNum = Math.round(Math.random() * maxRand);
 
-    console.log("randNum: ", randNum);
-    console.log("agent.activity_level: ", agent.activity_level);
-
     if (randNum <= agent.activity_level) {
-      console.log("responded", agent.agent_name);
-      console.log("exp.simultaneous_responses", exp.simultaneous_responses);
       setTimeout(() => {
         agentHandler(agent, exp);
-      }, 5000);
+      }, TimeOut);
+      TimeOut += 2000;
       if (!exp.simultaneous_responses) {
         break;
       }
