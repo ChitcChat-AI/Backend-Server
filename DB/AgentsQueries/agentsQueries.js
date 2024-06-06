@@ -85,7 +85,7 @@ const getExperimentWithAgentsAsJson = async (exp_id) => {
                                     'exp_name',e.exp_name,
                                     'exp_messages_col_id', e.exp_messages_col_id,
                                     'study_id', s.study_id,
-                                    'study_name', s.study_name
+                                    'study_name', s.study_name,
                                     'simultaneous_responses', e.simultaneous_responses
                                 ),
                                 'agents', json_agg( json_build_object(
@@ -116,7 +116,7 @@ const getExperimentWithAgentsAsJson = async (exp_id) => {
                                     'exp_num_participants', e.exp_num_participants,
                                     'exp_messages_col_id', e.exp_messages_col_id,
                                     'study_id', s.study_id,
-                                    'study_name', s.study_name
+                                    'study_name', s.study_name,
                                     'simultaneous_responses', e.simultaneous_responses
                                 ),
                                 'agents', '[]'::jsonb
