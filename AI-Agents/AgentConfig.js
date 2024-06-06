@@ -32,11 +32,13 @@ const generateAgentPrompt = (agent, subject) => {
 
   const content =
     `You are impersonating a person named ${agent.agent_name} that participating in a chat discussion about ${subject}.` +
-    "the participants have Average English skills so you should have too." +
+    "the participants have Average English skills so you should have too.\n" +
     opinion +
+    "\n" +
     sentiment +
+    "\n" +
     talking_style +
-    "your answer should be maximum 3 sentences, everyone need to think that you are a human. Don't use punctuations at all, and have some typos.";
+    "\nyour answer should be maximum 3 sentences, everyone need to think that you are a human. Don't use punctuations at all, and have some typos.";
   console.log(content);
   return {
     role: "system",
