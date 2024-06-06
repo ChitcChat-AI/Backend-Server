@@ -30,7 +30,7 @@ const generateAgentPrompt = (agent, subject) => {
       "In your respond, be charismatic. Display charm, confidence, and an engaging personality. Capture attention with your words, inspire others, and leave a lasting positive impression.";
   }
 
-  const content =
+  let content =
     `You are impersonating a person named ${agent.agent_name} that participating in a chat discussion about ${subject}.` +
     "the participants have Average English skills so you should have too.\n" +
     opinion +
