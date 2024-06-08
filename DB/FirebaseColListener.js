@@ -34,15 +34,11 @@ const firestoreColListener = (colId) => {
     });
 
     console.log("DocData:", docData);
-    if (docData?.uid === "RPLkPefjRdQ3WL3prDMQLTtwjZ02") {
-      // ChitChat User
-      console.log("ChitChat User:", docData.uid);
-      return;
-    }
 
     if (
       !docData?.hasOwnProperty("sentimentScore") &&
-      docData?.createdAt !== null
+      docData?.createdAt !== null &&
+      !docData?.uid === "RPLkPefjRdQ3WL3prDMQLTtwjZ02" //ChitChat User
     ) {
       const { exp, agents } = await getExperimentWithAgentsAsJson(colId);
       let isAgent = false;
