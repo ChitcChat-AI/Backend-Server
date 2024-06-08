@@ -33,7 +33,8 @@ const firestoreColListener = (colId) => {
       docId = doc.id;
     });
 
-    if (docData.uid === "RPLkPefjRdQ3WL3prDMQLTtwjZ02") {
+    console.log(docData);
+    if (docData?.uid === "RPLkPefjRdQ3WL3prDMQLTtwjZ02") {
       // ChitChat User
       return;
     }
