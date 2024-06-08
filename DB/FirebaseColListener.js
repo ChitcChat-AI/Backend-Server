@@ -39,7 +39,7 @@ const firestoreColListener = (colId) => {
       !docData?.hasOwnProperty("sentimentScore") &&
       docData?.createdAt !== null &&
       docData?.uid != "RPLkPefjRdQ3WL3prDMQLTtwjZ02" && //ChitChat User
-      len(docData.text) > 30
+      docData.text.length > 30
     ) {
       const { exp, agents } = await getExperimentWithAgentsAsJson(colId);
       let isAgent = false;

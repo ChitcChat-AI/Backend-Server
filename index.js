@@ -33,6 +33,8 @@ app.use(
     stream: rfsStream,
   })
 );
+
+app.enable('trust proxy');
 app.use(
   cors({
     credentials: true,
