@@ -32,6 +32,12 @@ const firestoreColListener = (colId) => {
       docData = doc.data();
       docId = doc.id;
     });
+
+    if (docData.uid === "RPLkPefjRdQ3WL3prDMQLTtwjZ02") {
+      // ChitChat User
+      return;
+    }
+
     if (
       !docData?.hasOwnProperty("sentimentScore") &&
       docData?.createdAt !== null
