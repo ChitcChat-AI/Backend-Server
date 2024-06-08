@@ -33,11 +33,16 @@ app.use(
     stream: rfsStream,
   })
 );
+app.use(cors({credentials: true, origin: [process.env.CLIENT_ORIGIN_URL], optionSuccessStatus:200}));
+
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: {
+    secure: true, // Set secure to true if using HTTPS
+  }
 }));
 
 
@@ -47,7 +52,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

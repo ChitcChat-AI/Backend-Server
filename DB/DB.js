@@ -13,7 +13,7 @@ pool.on('connect', (client) => {});
 pool.on('error', (err, client) => {
     throw(err);
 
-} )
+})
 module.exports = {
     query: (text, params) => pool.query(text, params),
 };

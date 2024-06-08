@@ -8,10 +8,6 @@ const createStudy = async (name, subject, prompt, description) => {
 }
 
 
-const getAllStudies = async () => {
-    const {rows} = await db.query('SELECT * FROM studies');
-    return rows;
-}
 
 const getExperimentsByStudyId = async (id) => {
     const {rows} = await db.query(
@@ -25,8 +21,14 @@ const getExperimentsByStudyId = async (id) => {
 
 }
 
-const getStudyById = async (id) => {
-    const {rows} = await db.query('SELECT * FROM studies WHERE study_id = $1', [id]);
+const getStudyById = async (researcherId, studyId) => {
+    const {rows} = await db.query(
+        `
+        SELECT s.*
+            FROM studies s
+            INNER JOIN researcher_study rs ON rs.study_id = s.study_id
+            WHERE researcher_id = $1
+            AND s.study_id = $2 ;`, [researcherId, studyId]);
     return rows[0];
 }
 
@@ -77,14 +79,25 @@ const getStudiesByResearcherId = async (id) => {
     )
     return rows;
 }
+
+const joinStudyToResearcher =  async (researcherId, studyId) =>{
+    const {rows} = await db.query(
+        `INSERT INTO researcher_study
+                (researcher_id, study_id) 
+                VALUES ($1, $2) RETURNING *`,
+        [researcherId,studyId]
+    )
+    return rows[0];
+}
 module.exports = {
     createStudy,
-    getAllStudies,
     getExperimentsByStudyId,
     getStudyById,
     updateStudy,
     updateStudyDynamically,
     deleteStudy,
     addExperimentsToStudy,
-    getStudiesByResearcherId
+    getStudiesByResearcherId,
+    joinStudyToResearcher
+
 }

@@ -6,10 +6,17 @@ authRouter.get('/google', passport.authenticate('google', {scope: ['profile', 'e
 authRouter.get('/google/callback',
     passport.authenticate('google', {failureRedirect: '/'}),
     (req, res) => {
-    res.status(200).send("Logged in successfully!");
-});
+        res.redirect('http://localhost:3002/researches');
+    });
 
-authRouter.get('/logout', (req, res,next) => {
+authRouter.get('/user/', (req, res) => {
+    if (req.isAuthenticated()) {
+        res.json(req.user);
+    } else {
+        res.json(null);
+    }
+});
+authRouter.get('/logout', (req, res, next) => {
     req.logout(err => {
         if (err) {
             return next(err);
@@ -18,4 +25,4 @@ authRouter.get('/logout', (req, res,next) => {
     });
 });
 
-module.exports= {authRouter}
+module.exports = {authRouter}
