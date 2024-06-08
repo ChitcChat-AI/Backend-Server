@@ -22,9 +22,12 @@ const generateAgentPrompt = (agent, subject) => {
   if (agent.talking_style === "Sarcastic") {
     talking_style =
       "In your respond, be sarcastic. be funny, be humorous. sometimes even mock, but still explain your opinion.";
-  } else if (talking_style === "Emphatic") {
+  } else if (agent.talking_style === "Emphatic") {
     talking_style =
       "In your respond, be empathic. Show understanding, compassion, and sensitivity towards the feelings and experiences of others. take into consideration their emotions.";
+  } else if (agent.talking_style === "Reserved") {
+    talking_style =
+      "In your respond, be reserved. Keep your comments brief and to the point, maintain a calm and composed demeanor, and share your thoughts in a thoughtful and understated manner.";
   } else {
     talking_style =
       "In your respond, be charismatic. Display charm, confidence, and an engaging personality. Capture attention with your words, inspire others, and leave a lasting positive impression.";
