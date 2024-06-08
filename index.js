@@ -1,7 +1,9 @@
 const express = require("express");
+const session = require('express-session');
 const morgan = require("morgan"); // import morgan
 require("dotenv").config();
 const port = process.env.PORT || 3000;
+const passport = require('passport');
 const { experimentsRouter } = require("./routers/experimentsRouter");
 const { agentsRouter } = require("./routers/agentsRouter");
 const { snaGraphRouter } = require("./routers/snaGraphRouter");
@@ -14,6 +16,7 @@ const { APIError } = require("./ErrorHaneling/APIError");
 const { logger } = require("./ErrorHaneling/ErrorLogger");
 const cors = require("cors");
 const rfs = require("rotating-file-stream");
+const {authRouter} = require("./routers/authRouter");
 
 const app = express();
 // MORGAN SETUP
@@ -30,11 +33,30 @@ app.use(
     stream: rfsStream,
   })
 );
+app.use(cors({credentials: true, origin: [process.env.CLIENT_ORIGIN_URL], optionSuccessStatus:200}));
 
-app.use(cors());
+
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    secure: true, // Set secure to true if using HTTPS
+  }
+}));
+
+
+// Initialize Passport
+require('./Auth/GoogleAuth')(passport)// Pass the passport for configuration
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+app.use("/auth", authRouter)
 app.use("/api/studies", studiesRouter);
 app.use("/api/experiments", experimentsRouter);
 app.use("/api/agents", agentsRouter);
@@ -43,6 +65,7 @@ app.use("/api/surveys", surveysRouter);
 app.use("/api/researchers", researcherRouter);
 app.use("/api/register", mailRouter);
 app.use("/api/participant", participantRouter);
+
 
 app.use(async (err, req, res, next) => {
   if (err instanceof APIError) err.handleError();

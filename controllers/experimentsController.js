@@ -1,8 +1,11 @@
 const queries = require('../DB/Queries');
+const experimentQueries = require('../DB/exerimentQueries/experimentQueries')
 const agentQueries = require('../DB/AgentsQueries/agentsQueries')
 const {CreateExperimentWithAgents} = require('../BuissnessLogic/CreateExperimentWithAgents');
 const {ChangeExperimentStatus} = require('../BuissnessLogic/ChangeExperimentStatus')
 const {APIError} = require('../ErrorHaneling/APIError')
+const {unAuthorized} = require("../Auth/authUtilis");
+
 const getExperimentWithAgentsById = async (req, res, next) => {
     try {
         const exp_id = req.params.id;
@@ -61,14 +64,17 @@ const deleteExperiment = async (req, res, next) => {
     }
 }
 
-const getAllExperiments = async (req, res, next) => {
+const getExperimentsByResearcherId = async (req,res,next) => {
     try {
-        res.status(200).json(await queries.getAllExperimentsWithStudyIdAndName());
+        const user = req.user;
+        if (!user) return await unAuthorized(req,res)
+        res.status(200).json(await experimentQueries.getExperimentsByResearcherId(user.researcher_id));
     } catch (err) {
         const apiError = new APIError(err)
         next(apiError, req, res);
     }
 }
+
 const updateExperimentStatus = async (req, res, next) => {
     try {
         const {exp_id, exp_status} = req.body;
@@ -86,7 +92,7 @@ module.exports = {
     createExperiment,
     updateExperiment,
     deleteExperiment,
-    getAllExperiments,
+    getExperimentsByResearcherId,
     createExperimentWithAgents,
     updateExperimentStatus
 }
