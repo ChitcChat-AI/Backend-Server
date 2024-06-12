@@ -1,29 +1,34 @@
-const {Router} = require('express');
-const passport = require('passport');
+const { Router } = require("express");
+const passport = require("passport");
 const authRouter = new Router();
-require('dotenv').config()
+require("dotenv").config();
 
-authRouter.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}));
-authRouter.get('/google/callback',
-    passport.authenticate('google', {failureRedirect: '/'}),
-    (req, res) => {
-        res.redirect(process.env.CLIENT_ORIGIN_URL + '/researches' );
-    });
+authRouter.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+authRouter.get(
+  "/google/callback",
+  passport.authenticate("google", { failureRedirect: "/" }),
+  (req, res) => {
+    res.redirect(process.env.CLIENT_ORIGIN_URL + "/researches");
+  }
+);
 
-authRouter.get('/user/', (req, res) => {
-    if (req.isAuthenticated()) {
-        res.json(req.user);
-    } else {
-        res.json(null);
+authRouter.get("/user/", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.json(req.user);
+  } else {
+    res.json(null);
+  }
+});
+authRouter.get("/logout", (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
     }
-});
-authRouter.get('/logout', (req, res, next) => {
-    req.logout(err => {
-        if (err) {
-            return next(err);
-        }
-        res.send('Logged out.');
-    });
+    res.redirect(process.env.CLIENT_ORIGIN_URL + "/login");
+  });
 });
 
-module.exports = {authRouter}
+module.exports = { authRouter };
