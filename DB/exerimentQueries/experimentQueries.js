@@ -3,7 +3,7 @@ const db = require("../DB");
 module.exports = {
     getExperimentsByResearcherId : async (id) => {
         const {rows} = await db.query(
-            `SELECT e.*
+            `SELECT e.*, s.study_name
                 FROM experiments e
                 INNER JOIN study_experiment se ON e.exp_id= se.exp_id
                 INNER JOIN studies s ON s.study_id = se.study_id
