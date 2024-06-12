@@ -23,10 +23,13 @@ authRouter.get("/user/", (req, res) => {
   }
 });
 authRouter.get("/logout", (req, res, next) => {
+  console.log("logout");
   req.logout((err) => {
     if (err) {
+      console.log(err);
       return next(err);
     }
+    console.log(process.env.CLIENT_ORIGIN_URL + "/login");
     res.redirect(process.env.CLIENT_ORIGIN_URL + "/login");
   });
 });
