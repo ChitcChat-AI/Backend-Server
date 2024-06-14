@@ -38,11 +38,7 @@ app.enable("trust proxy");
 app.use(
   cors({
     credentials: true,
-    origin: [
-      process.env.CLIENT_ORIGIN_URL,
-      process.env.CHAT_ORIGIN_URL,
-      process.env.LOCAL_HOST_URL,
-    ],
+    origin: [process.env.CLIENT_ORIGIN_URL, process.env.CHAT_ORIGIN_URL],
     optionSuccessStatus: 200,
   })
 );
