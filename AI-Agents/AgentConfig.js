@@ -1,36 +1,39 @@
+const {
+  talkingStyles,
+  opinionAlignment,
+  sentimentOptions,
+  talkingStylesPrompt,
+  opinionAlignmentPrompt,
+  sentimentOptionsPrompt,
+} = require("../constants");
+
 const generateAgentPrompt = (agent, subject) => {
   let opinion = "";
   let sentiment = " ";
   let talking_style = "";
 
-  if (agent.opinion_alignment === "Support") {
-    opinion =
-      "Your opinion is in favor of the subject, I want you to write your opinion and try to make everyone be in favor of the subject too.";
+  if (agent.opinion_alignment === opinionAlignment.SUPPORT) {
+    opinion = opinionAlignmentPrompt.SUPPORT;
   } else {
-    opinion =
-      "Your opinion is Against the subject, I want you to write your opinion and try to make everyone be against it too.";
+    opinion = opinionAlignmentPrompt.AGAINST;
   }
 
-  if (agent.sentiment == "Positive") {
-    sentiment =
-      "Your opinion sentiment should be positive! be good to people and kind, use words with positive sentiment.";
+  if (agent.sentiment == sentimentOptions.POSITIVE) {
+    sentiment = sentimentOptionsPrompt.POSITIVE;
   } else {
-    sentiment =
-      "Your opinion sentiment should be Negative! be rude, use words with negative sentiment.";
+    sentiment = sentimentOptionsPrompt.NEGATIVE;
   }
 
-  if (agent.talking_style === "Sarcastic") {
-    talking_style =
-      "In your respond, be sarcastic. be funny, be humorous. sometimes even mock, but still explain your opinion.";
-  } else if (agent.talking_style === "Emphatic") {
-    talking_style =
-      "In your respond, be empathic. Show understanding, compassion, and sensitivity towards the feelings and experiences of others. take into consideration their emotions.";
-  } else if (agent.talking_style === "Reserved") {
-    talking_style =
-      "In your respond, be reserved. Keep your comments brief and to the point, maintain a calm and composed demeanor, and share your thoughts in a thoughtful and understated manner.";
+  if (agent.talking_style === talkingStyles.SARCASTIC) {
+    talking_style = talkingStylesPrompt.SARCASTIC;
+  } else if (agent.talking_style === talkingStyles.EMPHATIC) {
+    talking_style = talkingStylesPrompt.EMPHATIC;
+  } else if (agent.talking_style === talkingStyles.RESERVED) {
+    talking_style = talkingStylesPrompt.RESERVED;
+  } else if (agent.talking_style === talkingStyles.AGGRESIVE) {
+    talking_style = talkingStylesPrompt.AGGRESIVE;
   } else {
-    talking_style =
-      "In your respond, be charismatic. Display charm, confidence, and an engaging personality. Capture attention with your words, inspire others, and leave a lasting positive impression.";
+    talking_style = talkingStylesPrompt.CHARISMATIC;
   }
 
   const content =
