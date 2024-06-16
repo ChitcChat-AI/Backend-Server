@@ -18,6 +18,8 @@ const cors = require("cors");
 const rfs = require("rotating-file-stream");
 const { authRouter } = require("./routers/authRouter");
 
+
+const isProd = process.env.PROD_MODE === 'true';
 const app = express();
 // MORGAN SETUP
 // create a log stream
@@ -49,9 +51,9 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: {
-      secure: false, // Set secure to true if using HTTPS
+      secure: isProd, // Set secure to true if using HTTPS
       httpOnly: true,
-      sameSite: "lax", // Adjust this if needed
+      sameSite: isProd ? "none" : "lax", // Adjust this if needed
     },
   })
 );
