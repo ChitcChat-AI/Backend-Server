@@ -22,10 +22,10 @@ Before you begin, ensure you have met the following requirements:
 To install and run, follow these steps:
 
 1. **Clone the Repository**  
-   git clone https://github.com/your-username/your-repository-name.git
+   git clone https://github.com/ChitcChat-AI/Backend-Server.git
 
 2. **Navigate to the Project Directory**
-    cd your-repository-name
+    cd Backend-Server
 
 3. **Install Dependencies**
      npm install
