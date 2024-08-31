@@ -16,7 +16,7 @@ This project is particularly suited for researchers in discourse analysis and op
 ### Prerequisites
 Before you begin, ensure you have met the following requirements:
 - Node.js, npm
-- 
+
 
 ### Steps
 To install and run, follow these steps:
