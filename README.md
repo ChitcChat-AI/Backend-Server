@@ -39,7 +39,7 @@ To install and run, follow these steps:
 
 5. **Run the Application**
 
-   npm start
+   npm run dev
 
 6. **Access the Application**
 
