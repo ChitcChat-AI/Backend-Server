@@ -22,22 +22,28 @@ Before you begin, ensure you have met the following requirements:
 To install and run, follow these steps:
 
 1. **Clone the Repository**  
+
    git clone https://github.com/ChitcChat-AI/Backend-Server.git
 
 2. **Navigate to the Project Directory**
-    cd Backend-Server
+
+   cd Backend-Server
 
 3. **Install Dependencies**
-     npm install
+
+   npm install
 
 4. **Set Up Environment Variables**
-    create a .env file in the root directory and add the necessary variables
 
-6. **Run the Application**
-    npm start
+   create a .env file in the root directory and add the necessary variables
 
-7. **Access the Application**
-     To interact with the backend, use Postman to send HTTP requests. Here's how:
+5. **Run the Application**
+
+   npm start
+
+6. **Access the Application**
+
+   To interact with the backend, use Postman to send HTTP requests. Here's how:
   - Open Postman.
   - Create a new request.
   - Set the method (GET, POST, PUT, DELETE, etc.) and enter the URL, e.g., http://localhost:3000/api/endpoint.
