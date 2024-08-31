@@ -1,13 +1,15 @@
 # About
 
-[Project Name] is a [brief description of your project]. It allows users to [describe the main functionality or purpose of your project]. This project is designed to [mention any special goals or unique aspects].
+The ChitChat.AI Backend is a server designed to facilitate communication with the research platform, enabling the management of research projects and experiments, configuration of agents, and execution of studies. It empowers users to conduct experiments, analyze results, and gain valuable insights.
 
 Key features include:
-- [Feature 1]
-- [Feature 2]
-- [Feature 3]
 
-This project is ideal for [mention your target audience or use cases].
+- Management of Research Projects
+- Execution of Experiments within Research Frameworks
+- Coordination of AI Agent Contributions to Chat Discussions
+
+This project is particularly suited for researchers in discourse analysis and opinion change, especially those examining the influence of conversational AI agents on discourse.
+
 
 # Installation
 
