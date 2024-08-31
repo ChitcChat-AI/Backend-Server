@@ -33,8 +33,6 @@ const firestoreColListener = (colId) => {
       docId = doc.id;
     });
 
-    console.log("DocData:", docData);
-
     if (
       !docData?.hasOwnProperty("sentimentScore") &&
       docData?.createdAt !== null &&
@@ -63,7 +61,7 @@ const firestoreColListener = (colId) => {
             sentiment.score = sentimentTemp.score;
           }
         } catch (e) {
-          console.log("get sentiment error" + e);
+          console.error("get sentiment error" + e);
         }
       }
       await setDoc(docRef, {
@@ -74,9 +72,7 @@ const firestoreColListener = (colId) => {
         uid: docData.uid,
         sentimentScore: sentiment.score,
       });
-    } else {
-      console.log(docData);
-    }
+    } 
   });
 };
 

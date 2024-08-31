@@ -7,7 +7,6 @@ async function createSnaGraph(collectionId, labelName) {
     try {
         const messagesData = await getMessages(collectionId);
         await createGraph(messagesData, labelName);
-        console.log("returned from createGraph");
     } catch (error) {
         console.error("Error in graphHandler:", error);
     }

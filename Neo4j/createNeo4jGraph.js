@@ -19,7 +19,6 @@ async function createGraph(messagesData, projectName) {
         }
       );
       if (!sentimentScore) {
-        console.log("sentiment Score undefined when creating graph");
         sentimentScore = 0;
       }
       let sentimentLabel;
